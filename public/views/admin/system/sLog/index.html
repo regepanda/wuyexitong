@@ -1,0 +1,121 @@
+<div id="sLog_index">
+    <div class="col-sm-12">
+        <nav class="pull-right">
+            <ul class="pagination">
+                <li>
+                    <a ng-click="selectPage.getLastData()"
+                       ng-if="selectPage.lastCache.length>0" aria-label="Previous">
+                        <span class="glyphicon glyphicon-chevron-left"  aria-hidden="true"></span>
+                    </a>
+                </li>
+                <li>
+                    <a ng-click="selectPage.getData()" >
+                        <span class="glyphicon glyphicon-refresh"  aria-hidden="true"></span>
+                    </a>
+                </li>
+                <li>
+                    <a  ng-click="selectPage.getNextData()" aria-label="Next"
+                        ng-if="selectPage.nextCache.length>0">
+                        <span class="glyphicon glyphicon-chevron-right"  aria-hidden="true"></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <h2>查看记录</h2>
+    </div>
+    <div class="col-sm-12">
+
+        <form class="form-inline">
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    分类:{{keywordClassMap[selectPage.limit["class"]]}} <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a
+                            ng-click="selectPage.changeLimit('class',null)">全部分类</a>
+                    </li>
+                    <li ng-repeat="class in classData"><a
+                            ng-click="selectPage.changeLimit('class',class.class_id)">{{class.class_name}}</a>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    等级:{{selectPage.limit["level"]}} <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a
+                            ng-click="selectPage.changeLimit('level',null)">全部等级</a>
+                    </li>
+                    <li ng-repeat="level in levelData"><a
+                            ng-click="selectPage.changeLimit('level',level.level_id)">{{level.level_name}}</a>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    排序:{{selectPage.limit["sort"]}} <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="" ng-click="selectPage.changeLimit('sort','log_id')">时间</a></li>
+
+                </ul>
+
+            </div>
+
+
+            <label class=" pull-right">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-click="selectPage.toggleSort()" ng-checked="selectPage.limit.desc"> 倒序
+                    </label>
+                </div>
+            </label>
+
+
+        </form>
+        <br>
+        <table class="table table-hover table-bordered">
+            <tr>
+                <th><span class="glyphicon glyphicon-tag">  ID</span></th>
+                <th><span class="glyphicon glyphicon-time">  记录创建时间</span></th>
+                <th><span class="glyphicon glyphicon-user">  管理员记录</span></th>
+                <th><span class="glyphicon glyphicon-paperclip">  记录类型</span></th>
+                <th><span class="glyphicon glyphicon-sort-by-order">  记录等级</span></th>
+                <th><span class="glyphicon glyphicon-cog">  操作</span></th>
+            </tr>
+            <tr class="animate_item" ng-repeat="single in selectPage.data" >
+                <td>{{single.log_id}}</td>
+                <td>{{single.log_create_time}}</td>
+                <td>{{single.log_admin}}</td>
+                <td>{{single.class_name}}</td>
+                <td>{{single.log_level}}</td>
+                <td>
+                    <button class="btn btn-info btn-sm " ng-click="goDetail(single.log_id)">详情</button>
+                </td>
+
+            </tr>
+        </table>
+        <nav>
+            当前第 {{ selectPage.page.nowPage }} 页 | 总计 {{ selectPage.page.totalPage }} 页
+            <ul class="pager">
+                <li><a ng-if="selectPage.page.nowPage>1"
+                       href="" ng-click="selectPage.previousPage()">前一页</a></li>
+
+                <li><a ng-if="selectPage.page.nowPage<selectPage.page.totalPage"
+                       href="" ng-click="selectPage.nextPage()">下一页</a></li>
+            </ul>
+        </nav>
+
+
+    </div>
+
+
+</div>
+

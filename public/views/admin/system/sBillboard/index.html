@@ -1,0 +1,225 @@
+<div id="sBillboard_index">
+    <div class="col-sm-12">
+        <nav class="pull-right">
+            <ul class="pagination">
+                <li>
+                    <a ng-click="selectPage.getLastData()"
+                       ng-if="selectPage.lastCache.length>0" aria-label="Previous">
+                        <span class="glyphicon glyphicon-chevron-left"  aria-hidden="true"></span>
+                    </a>
+                </li>
+                <li>
+                    <a ng-click="selectPage.getData()" >
+                        <span class="glyphicon glyphicon-refresh"  aria-hidden="true"></span>
+                    </a>
+                </li>
+                <li>
+                    <a  ng-click="selectPage.getNextData()" aria-label="Next"
+                        ng-if="selectPage.nextCache.length>0">
+                        <span class="glyphicon glyphicon-chevron-right"  aria-hidden="true"></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <h2>公告信息</h2>
+    </div>
+    <div class="col-sm-12">
+
+        <form class="form-inline">
+
+            <button type="button" class="btn btn-success glyphicon glyphicon-search" data-toggle="modal" data-target="#addBillboard">
+                添加公告信息
+            </button>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    排序:{{selectPage.limit["sort"]}} <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="" ng-click="selectPage.changeLimit('sort','billboard_id')">时间</a></li>
+
+                </ul>
+
+            </div>
+
+
+            <label class=" pull-right">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-click="selectPage.toggleSort()" ng-checked="selectPage.limit.desc"> 倒序
+                    </label>
+                </div>
+            </label>
+
+
+        </form>
+        <br>
+        <table class="table table-hover table-bordered">
+            <tr>
+                <th><span class="glyphicon glyphicon-tag">  ID</span></th>
+                <th><span class="glyphicon glyphicon-time">  公告创建时间</span></th>
+                <th><span class="glyphicon glyphicon-time">  公告更新时间</span></th>
+                <th><span class="glyphicon glyphicon-sort-by-order">  公告主题</span></th>
+                <th><span class="glyphicon glyphicon-cog">  操作</span></th>
+            </tr>
+            <tr class="animate_item" ng-repeat="single in selectPage.data" >
+                <td>{{single.billboard_id}}</td>
+                <td>{{single.billboard_create_time}}</td>
+                <td>{{single.billboard_update_time}}</td>
+                <td>{{single.billboard_title}}</td>
+                <td>
+                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#detail{{single.billboard_id}}">
+                        详情
+                    </button>
+                    <!-- Modal 公告详情-->
+                    <div class="modal fade" id="detail{{single.billboard_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">公告详情</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label for="create_time" class="col-sm-2 control-label">创建时间</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" value="{{single.billboard_create_time}}" class="form-control" id="create_time">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="update_time" class="col-sm-2 control-label">更新时间</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" value="{{single.billboard_update_time}}" class="form-control" id="update_time">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="title" class="col-sm-2 control-label">公告主题</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" value="{{single.billboard_title}}" class="form-control" id="title">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="detail" class="col-sm-2 control-label">公告详细内容</label>
+                                            <div class="col-sm-10">
+                                                <textarea class="form-control" rows="3" id="detail">{{single.billboard_detail}}</textarea>
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#update{{single.billboard_id}}">
+                        修改
+                    </button>
+                    <!-- Modal 公告详情-->
+                    <div class="modal fade" id="update{{single.billboard_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel1">公告详情</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="form-horizontal">
+                                        <!--<input type="hidden" ng-model="single.billboard_id" id="{{single.billboard_id}}_billboard_id">-->
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">公告主题</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" ng-model="single.billboard_title" value="{{single.billboard_title}}" id="{{single.billboard_id}}_billboard_title">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">公告详细内容</label>
+                                            <div class="col-sm-10">
+                                                <textarea ng-model="single.billboard_detail" rows="3" value="{{single.billboard_detail}}"  id="{{single.billboard_id}}_billboard_detail"></textarea>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                        <button type="button" ng-click="updateBillboard(single.billboard_id)" class="btn btn-warning" data-dismiss="modal">修改</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#del{{single.billboard_id}}">
+                        删除
+                    </button>
+                    <!-- Modal 删除公告-->
+                    <div class="modal fade" id="del{{single.billboard_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel2">删除公告</h4>
+                                </div>
+                                <div class="modal-body">
+                                    警告！此操作危险，是否继续？
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-danger" ng-click="deleteBillboard(single.billboard_id)">删除</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <nav>
+            当前第 {{ selectPage.page.nowPage }} 页 | 总计 {{ selectPage.page.totalPage }} 页
+            <ul class="pager">
+                <li><a ng-if="selectPage.page.nowPage>1"
+                       href="" ng-click="selectPage.previousPage()">前一页</a></li>
+
+                <li><a ng-if="selectPage.page.nowPage<selectPage.page.totalPage"
+                       href="" ng-click="selectPage.nextPage()">下一页</a></li>
+            </ul>
+        </nav>
+
+
+    </div>
+
+
+</div>
+
+<!-- Modal添加公告信息-->
+<div class="modal fade" id="addBillboard" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel3">添加公告信息</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">公告主题</label>
+                        <div class="col-sm-10">
+                            <input type="text" ng-model="billboard_title" class="form-control" placeholder="公告主题">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">公告详情</label>
+                        <div class="col-sm-10">
+                            <input type="text" ng-model="billboard_detail" class="form-control" placeholder="公告详情">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-success" ng-click="addBillboard()" data-dismiss="modal">添加</button>
+            </div>
+        </div>
+    </div>
+</div>
+

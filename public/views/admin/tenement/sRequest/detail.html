@@ -1,0 +1,156 @@
+<p id="sRequest_detail">
+
+    <div class="col-sm-12">
+        <nav class="pull-right">
+            <ul class="pagination">
+                <li>
+                    <a ng-click="goIndex()"
+                       aria-label="Previous">
+                        <span class="glyphicon glyphicon-chevron-left"  aria-hidden="true"></span>
+                    </a>
+                </li>
+                <li>
+                    <a  ng-click="getData()">
+                        <span class="glyphicon glyphicon-refresh"  aria-hidden="true"></span>
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+        <h2>请求详情</h2>
+    </div>
+    <div class="col-sm-5">
+        <h3>基本信息：</h3>
+        <p>id：{{id}}</p>
+        <p>类型：{{detailData.class_name}}</p>
+        <p>当前请求状态：<b>{{detailData.status_name}}</b></p>
+        <p>价格：{{detailData.request_price}}</p>
+        <p>客服信息：{{detailData.request_admin_intro}}</p>
+    </div>
+    <div class="col-sm-5">
+        <h3>基本信息：</h3>
+        <p>创建时间：{{detailData.request_create_time}}</p>
+        <p>更新时间：{{detailData.request_update_time}}</p>
+        <p>请求用户：{{detailData.user_username}}</p>
+        <p>用户请求信息：{{detailData.request_user_intro|json}}</p>
+    </div>
+    <div class="col-sm-2">
+        <p class="col-sm-4">
+            <h3>操作：</h3>
+            <p>
+                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#update">
+                    <span class="glyphicon glyphicon-edit">修改</span>
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="update" tabindex="-1" role="dialog" aria-labelledby="updateLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="updateLabel">修改请求</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form class="form-horizontal">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">管理员描述</label>
+                                        <div class="col-sm-9">
+                                            <textarea ng-model="updateData" class="form-control" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                <button type="button" ng-click="formSubmit()" class="btn btn-primary" data-dismiss="modal"> 修改 </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p>
+            <p>
+                <button data-toggle="modal" data-target="#setStatusReadyHandle" type="button" ng-if="detailData.status_name == keywordStatusMap[6]" class="btn btn-warning">准备处理</button>
+                <button data-toggle="modal" data-target="#setStatusInHandle" type="button" ng-if="detailData.status_name == keywordStatusMap[7]" class="btn btn-warning">处理中</button>
+                <button type="button" ng-if="detailData.status_name == keywordStatusMap[8]" ng-click="setStatusHaveHandle()" class="btn btn-warning">完成处理</button>
+
+            </p>
+            <p>
+                <button type="button" ng-if="detailData.status_name == keywordStatusMap[6] || detailData.status_name == keywordStatusMap[7]" ng-click="setStatusCancel()" class="btn btn-default btn-xs">取消请求</button>
+            </p>
+        </p>
+    </div>
+    <div class="col-sm-12" ng-if="detailData.payment_id != null">
+        <!--这里是当前请求的所有支付单-->
+        <h3>请求支付单信息</h3>
+        <table class="table table-hover table-bordered">
+            <tr class="info">
+                <td><h4>ID</h4></td>
+                <td><h4>创建时间</h4></td>
+                <td><h4>更新时间</h4></td>
+                <td><h4>支付价格</h4></td>
+                <td><h4>支付状态</h4></td>
+                <td><h4>操作</h4></td>
+            </tr>
+            <tr class="active">
+                <td> <p>{{detailData.payment_id}}</p></td>
+                <td> <p>{{detailData.payment_create_time}}</p></td>
+                <td><p>{{detailData.payment_update_time}}</p></td>
+                <td><p>{{detailData.request_price}}</p></td>
+                <td><p>{{detailData.payment_status}}</p></td>
+                <td><a class="btn btn-sm btn-success" href="/admin_sPayment#/detail/{{detailData.payment_id}}" ng-show="detailData.community_group == null">查看详情</a></td>
+            </tr>
+        </table>
+    </div>
+</p>
+
+<!-- Modal 准备处理-->
+<div ng-show="detailData.request_status == 6" class="modal fade" id="setStatusReadyHandle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">切换到准备处理</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">管理员描述</label>
+                        <div class="col-sm-9">
+                            <textarea ng-model="request_admin_intro" class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">定义价格</label>
+                        <div class="col-sm-9">
+                            <input type="text" ng-model="request_price" class="form-control" id="inputEmail3">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary"  ng-click="setStatusReadyHandle()" data-dismiss="modal">准备处理</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal处理中 -->
+<div ng-show="detailData.request_status == 7" class="modal fade" id="setStatusInHandle" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel1">切换到处理中</h4>
+            </div>
+            <div class="modal-body">
+                此操作危险，你确认操作吗？操作成功后将返回当前请求的所有支付单
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" ng-click="setStatusInHandle()">处理中</button>
+            </div>
+        </div>
+    </div>
+</div>

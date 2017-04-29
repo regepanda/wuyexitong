@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" type="text/css" href="source/bootstrap/css/bootstrap.min.css">
+
+    <!-- 可选的Bootstrap主题文件（一般不用引入） -->
+    <link rel="stylesheet" type="text/css" href="source/bootstrap/css/bootstrap-theme.min.css">
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="source/js/jquery-1.9.1.min.js"></script>
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="source/bootstrap/js/bootstrap.min.js"></script>
+
+
+    <!-- AngularJS文件 -->
+    <script src="./AngularJs/bower_components/angular/angular.min.js"></script>
+    <script src="./AngularJs/script/app.js"></script>
+    <style>
+
+        .logincss{
+            display: block;
+            margin-left:500px;
+            margin-top: 150px;
+            /*  border: dashed darkblue 1px; */
+            width:400px;
+            height: 300px;
+        }
+    </style>
+    <title></title>
+</head>
+<body ng-app="zc">
+<div class="logincss" ng-controller="zcContrl">
+    <div ng-show="loginShow==1">
+        <h2>管理员登录</h2>
+        <div>
+            <label class="control-label col-sm-3" for="inputSuccess3" >姓名</label>
+            <hr>
+            <input type="text" class="form-control" ng-model="user.username">
+        </div>
+        <div>
+            <label class="control-label col-sm-3" for="inputSuccess3">密码</label>
+            <input type="text" class="form-control" ng-model="user.pwd">
+        </div>
+        <div>
+            <button type="button" class="btn btn-success" ng-click="register()">注册</button>
+            <button type="button" class="btn btn-primary" ng-click="click()">登录</button>
+        </div>
+    </div>
+
+
+    <div>
+        <div ng-show="reg.length>0">
+            <h2>注册表</h2>
+            <input type="text" class="form-control" ng-model="re.reName" placeholder="注册用户名">
+            <input type="text" class="form-control" ng-model="re.rePwd" placeholder="注册密码">
+            <button type="button" class="btn btn-success" ng-click="y()">确定</button>
+            <button type="button" class="btn btn-info" ng-click="no()">取消</button>
+        </div>
+        <div ng-show="info.length>0">
+            <h2>{{info}}</h2>
+        </div>
+
+        <div ng-show="msg.length>0">
+            <h2>{{msg}}</h2>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    angular.module('zc',[])
+            .controller('zcContrl',function($scope){
+                //插入变量或者函数
+                $scope.user={username:'',pwd:''};
+                $scope.reg = '';
+                $scope.name = [];
+                $scope.password = [];
+                $scope.re= {reName:'',rePwd:''};
+
+                $scope.loginShow = 1;
+
+                $scope.click = function()
+                {
+                    if($scope.user.username == "" || $scope.user.pwd == "")
+                    {
+                        alert("用户名或管理员名不能为空");
+                        //  $scope.msg="登录失败!";
+                    }
+                    else
+                    {
+                        var $return;
+                        $return = $scope.name.indexOf($scope.user.username);
+                        if($return == -1)
+                        {
+                            alert("不存在此用户名");
+                            //   $scope.msg="登录失败!";
+                        }
+                        else
+                        {
+                            if($scope.user.pwd == $scope.password[$return])
+                            {
+                                alert("登录成功！");
+                                //    $scope.msg="登录成功!" ;
+                            }
+                            else
+                            {
+                                alert("密码错误！");
+                                //      $scope.msg="登录失败！";
+                            }
+                        }
+
+                    }
+                };
+
+                $scope.register = function()
+                {
+                    $scope.reg = "register";
+                    $scope.loginShow = 0;
+                };
+
+                $scope.y = function()
+                {
+                    if($scope.re.reName == "" || $scope.re.rePwd == "")
+                    {
+                        alert("用户名或密码不能为空！");
+                    }
+                    else {
+
+                        if ($scope.name.length == 0) {
+                            $scope.name.push($scope.re.reName);
+                            $scope.password.push($scope.re.rePwd);
+                            $scope.reg = "";
+                            $scope.loginShow = 1;
+                            alert("注册成功");
+                            //   $scope.info= "注册成功！";
+                        }
+                        else {
+                            var $return;
+                            $return = $scope.name.indexOf($scope.re.reName);
+                            if ($return == -1)          //无此变量
+                            {
+                                $scope.name.push($scope.re.reName);
+                                $scope.password.push($scope.re.rePwd);
+                                //  $scope.info= "注册成功！";
+                                alert("注册成功");
+                                $scope.loginShow = 1;
+                            }
+                            else {
+                                alert("此用户名已经存在，注册失败!");
+                                //  $scope.info = "此用户名已经存在，注册失败！";  //此用户名已经存在
+                            }
+
+                        }
+                    }
+
+                };
+
+                $scope.no = function()
+                {
+                    $scope.reg = "";
+                    $scope.loginShow = 1;
+                }
+
+
+            })
+
+
+</script>
+
+</html>

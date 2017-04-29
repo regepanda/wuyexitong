@@ -1,0 +1,120 @@
+<div id="sMessage_index">
+    <div class="col-sm-12">
+        <nav class="pull-right">
+            <ul class="pagination">
+                <li>
+                    <a ng-click="selectPage.getLastData()"
+                       ng-if="selectPage.lastCache.length>0" aria-label="Previous">
+                        <span class="glyphicon glyphicon-chevron-left"  aria-hidden="true"></span>
+                    </a>
+                </li>
+                <li>
+                    <a ng-click="selectPage.getData()" >
+                        <span class="glyphicon glyphicon-refresh"  aria-hidden="true"></span>
+                    </a>
+                </li>
+                <li>
+                    <a  ng-click="selectPage.getNextData()" aria-label="Next"
+                        ng-if="selectPage.nextCache.length>0">
+                        <span class="glyphicon glyphicon-chevron-right"  aria-hidden="true"></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <h2>查看系统信息</h2>
+    </div>
+    <div class="col-sm-12">
+
+        <form class="form-inline">
+            <a class="btn-success btn" href="" ng-click="sendMessage()">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                发送信息
+            </a>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    排序:{{selectPage.limit["sort"]}} <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="" ng-click="selectPage.changeLimit('sort','message_id')">时间</a></li>
+
+                </ul>
+
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-danger"  data-toggle="modal" data-target="#del_confirm">删除所选</button>
+
+
+                <!-- Modal -->
+                <div class="modal fade" id="del_confirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">确认删除</h4>
+                            </div>
+                            <div class="modal-body">
+                                <h2>此操作危险，确认继续 ？</h2>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                <button type="button" class="btn btn-danger" ng-click="deleteGroup()" data-dismiss="modal">删除</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <label class=" pull-right">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-click="selectPage.toggleSort()" ng-checked="selectPage.limit.desc"> 倒序
+                    </label>
+                </div>
+            </label>
+
+
+        </form>
+        <br>
+        <table class="table table-hover table-bordered">
+            <tr>
+                <th><span class="glyphicon glyphicon-tag">  ID</span></th>
+                <th><span class="glyphicon glyphicon-user">  接收用户</span></th>
+                <th><span class="glyphicon glyphicon-time">  发送时间</span></th>
+                <th><span class="glyphicon glyphicon-envelope">  是否已读</span></th>
+                <th><span class="glyphicon glyphicon-user">  接收管理员</span></th>
+                <th><span class="glyphicon glyphicon-cog">  操作</span></th>
+            </tr>
+            <tr class="animate_item" ng-repeat="single in selectPage.data" >
+                <td>{{single.message_id}}</td>
+                <td>{{single.user_username}}</td>
+                <td>{{single.message_create_time}}</td>
+                <td ng-if="single.message_read == 1">已读</td><td ng-if="single.message_read == 0">未读</td>
+                <td>{{single.admin_username}}</td>
+                <td>
+                    <input type="checkbox" ng-click="opGroup(single.message_id)">
+                    <button class="btn btn-primary btn-sm " ng-click="goDetail(single.message_id)">详情</button>
+                </td>
+
+            </tr>
+        </table>
+        <nav>
+            当前第 {{ selectPage.page.nowPage }} 页 | 总计 {{ selectPage.page.totalPage }} 页
+            <ul class="pager">
+                <li><a ng-if="selectPage.page.nowPage>1"
+                       href="" ng-click="selectPage.previousPage()">前一页</a></li>
+
+                <li><a ng-if="selectPage.page.nowPage<selectPage.page.totalPage"
+                       href="" ng-click="selectPage.nextPage()">下一页</a></li>
+            </ul>
+        </nav>
+
+
+    </div>
+
+
+</div>
+

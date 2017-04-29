@@ -1,0 +1,165 @@
+<div id="sPayment_index">
+    <div class="col-sm-12">
+
+        <div>
+            getUserInofo,获取用户基本信息:{{getUserInfoData}}
+        </div>
+        <br>
+
+        <div>
+            <h2>更改用户基本信息</h2>
+            <div>
+                <h4>请输入新的用户名</h4>
+                <input type="text " class="form-control" ng-model="username"  required autofocus>
+                <h4>请输入新的用户昵称</h4>
+                <input type="text " class="form-control" ng-model="nickname" placeholder="nickname" required autofocus>
+                <h4>请输入新的用户电话</h4>
+                <input type="text " class="form-control" ng-model="phone" placeholder="user_phone" required autofocus>
+                <h4>性别</h4>
+                <input type="text " class="form-control" ng-model="sex" placeholder="user_phone_backup" required autofocus>
+                <h4>生日</h4>
+                <input type="text " class="form-control" ng-model="birthday" placeholder="user_phone_backup" required autofocus>
+
+                <button  class="btn btn-success btn-sm" ng-click="updateUserInfo()">提交</button>
+            </div>
+            <div>
+                更改用户基本信息：{{updateUserData}}
+            </div>
+
+        </div>
+
+        <br>
+
+        <div>
+            <div>
+                <div>上传真实信息接口</div>
+                <div>
+                    <h4>请输入真实姓名</h4>
+                    <input type="text " class="form-control" ng-model="name"  required autofocus>
+                    <h4>请输入用户身份证号</h4>
+                    <input type="text " class="form-control" ng-model="ic_id" placeholder="nickname" required autofocus>
+                </div>
+                <button  class="btn btn-success btn-sm" ng-click="addTrueInfo()">提交</button>
+            </div>
+            <div>
+                上传真实信息:{{userTrueInfoData}}
+                <div>删除真实信息接口</div>
+                <button class="btn btn-danger btn-sm" ng-click="delTrueInfo()">删除</button>
+                <div>
+                    删除信息：{{userTrueDelData}}
+                </div>
+            </div>
+        </div>
+        <br>
+
+        <div>
+            <div>
+                获取真实信息接口:{{getTrueInfoData}}
+            </div>
+        </div>
+
+
+
+
+        <br>
+        <div>
+            <h2>获取房屋信息:{{getHouseData}}</h2>
+        </div>
+
+        <div>
+            <h2>添加房屋信息</h2>
+            <div>
+                <h4>请输入房屋区域</h4>
+                <input type="text " class="form-control" ng-model="area"  required autofocus>
+                <h4>请输入房屋地址</h4>
+                <input type="text " class="form-control" ng-model="address"  required autofocus>
+                <button  class="btn btn-success btn-sm" ng-click="addHouse()">提交</button>
+            </div>
+            <div>所添加的房屋信息：{{addHouseData}}</div>
+    </div>
+        <br>
+
+        <div>
+            <h2>修改房屋信息</h2>
+            <div>
+                <h4>请输入房屋id</h4>
+                <input type="text " class="form-control" ng-model="id"  required autofocus>
+                <h4>请输入房屋区域</h4>
+                <input type="text " class="form-control" ng-model="house_area"  required autofocus>
+                <h4>请输入房屋地址</h4>
+                <input type="text " class="form-control" ng-model="house_address"  required autofocus>
+                <button  class="btn btn-success btn-sm" ng-click="updateHouse()">提交</button>
+            </div>
+            <div>所修改的房屋信息：{{updateHouseData}}</div>
+        </div>
+
+        <div>
+            <div>删除房子</div>
+            <h4>请输入房屋id</h4>
+            <input type="text " class="form-control" ng-model="dd">
+            <button class="btn btn-danger btn-sm" ng-click="delHouse()">删除</button>
+            <div>
+                删除房子信息：{{delHouseData}}
+            </div>
+        </div>
+
+
+
+        <br>
+        <div>
+            <h2>获car信息:{{getCarData}}</h2></div>
+
+        <div>
+            <h2>添加car信息</h2>
+            <div>
+                <h4>请输入car name</h4>
+                <input type="text " class="form-control" ng-model="car_name"  required autofocus>
+                <h4>请输入car brand</h4>
+                <input type="text " class="form-control" ng-model="car_brand"  required autofocus>
+                <h4>请输入car color</h4>
+                <input type="text " class="form-control" ng-model="car_color"  required autofocus>
+                <h4>请输入car model</h4>
+                <input type="text " class="form-control" ng-model="car_model"  required autofocus>
+                <h4>请输入car plate_id</h4>
+                <input type="text " class="form-control" ng-model="car_plate_id"  required autofocus>
+                <button  class="btn btn-success btn-sm" ng-click="addCar()">提交</button>
+            </div>
+            <div>所添加的车子信息：{{addCarData}}</div>
+        </div>
+        <br>
+
+        <div>
+            <h2>修改car信息</h2>
+            <div>
+                <h4>id</h4>
+                <input type="text " class="form-control" ng-model="car_id"  required autofocus>
+                <h4>请输入car name</h4>
+                <input type="text " class="form-control" ng-model="up_name"  required autofocus>
+                <h4>请输入car brand</h4>
+                <input type="text " class="form-control" ng-model="up_brand"  required autofocus>
+                <h4>请输入car color</h4>
+                <input type="text " class="form-control" ng-model="up_color"  required autofocus>
+                <h4>请输入car model</h4>
+                <input type="text " class="form-control" ng-model="up_model"  required autofocus>
+                <h4>请输入car plate_id</h4>
+                <input type="text " class="form-control" ng-model="up_plate_id"  required autofocus>
+                <button  class="btn btn-success btn-sm" ng-click="updateCar()">提交</button>
+            </div>
+            <div>所修改的car信息：{{updateCarData}}</div>
+        </div>
+
+        <div>
+            <div>删除车子接口</div>
+            <button class="btn btn-danger btn-sm" ng-click="delCar()">删除</button>
+            <div>
+                删除车子信息：{{delCarData}}
+            </div>
+
+
+        </div>
+
+
+
+
+    </div>
+</div>

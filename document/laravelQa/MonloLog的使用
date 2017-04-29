@@ -1,0 +1,11 @@
+要使用Log，直接use即可
+use Log;
+
+Log::emergency($error);
+Log::alert($error);
+Log::critical($error);
+Log::error($error);
+Log::warning($error);
+Log::notice($error);
+Log::info($error);
+Log::debug($error);

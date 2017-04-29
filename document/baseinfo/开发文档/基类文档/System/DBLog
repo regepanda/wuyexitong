@@ -1,0 +1,23 @@
+DBLog:
+    public static function userLog($message, $user, $level,$otherData = null)
+        添加user相关数据
+        需要传入记录的信息、记录用户、记录的等级、可能会有其他的描述
+        成功返回true /false
+
+    public static function adminLog($message, $admin, $level,$otherData = null)
+        添加admin相关数据
+        需要传入记录的信息、记录管理员、记录的等级、可能会有其它的描述
+        成功返回true /false
+
+    public static function accountLog($message,$account,$level,$otherData = null)
+        用户添加账户的记录信息
+        需要传入记录的信息、用户账户、记录的等级、可能会有其它的数据
+        成功返回true /false
+
+
+记录等级
+const ERROR = 1;
+const WARNING = 2;
+const DEBUG = 3;
+const INFO = 4;
+const SYSTEMINFO = 5;

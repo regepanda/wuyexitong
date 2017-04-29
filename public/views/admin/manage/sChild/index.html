@@ -1,0 +1,172 @@
+<div id="sChild_index">
+    <div class="col-sm-12">
+        <nav class="pull-right">
+            <ul class="pagination">
+                <li>
+                    <a ng-click="selectPage.getLastData()"
+                       ng-if="selectPage.lastCache.length>0" aria-label="Previous">
+                        <span class="glyphicon glyphicon-chevron-left"  aria-hidden="true"></span>
+                    </a>
+                </li>
+                <li>
+                    <a ng-click="selectPage.getData()" >
+                        <span class="glyphicon glyphicon-refresh"  aria-hidden="true"></span>
+                    </a>
+                </li>
+                <li>
+                    <a  ng-click="selectPage.getNextData()" aria-label="Next"
+                        ng-if="selectPage.nextCache.length>0">
+                        <span class="glyphicon glyphicon-chevron-right"  aria-hidden="true"></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <h2>查看儿童信息</h2>
+    </div>
+    <div class="col-sm-12">
+
+        <form class="form-inline">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addChild">
+                添加儿童信息
+            </button>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    排序:{{selectPage.limit["sort"]}} <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="" ng-click="selectPage.changeLimit('sort','child_id')">时间</a></li></ul>
+            </div>
+
+            <label class=" pull-right">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-click="selectPage.toggleSort()" ng-checked="selectPage.limit.desc"> 倒序
+                    </label>
+                </div>
+            </label>
+
+
+        </form>
+        <br>
+        <table class="table table-hover table-bordered">
+            <tr>
+                <th><span class="glyphicon glyphicon-tag">  ID</span></th>
+                <th><span class="glyphicon glyphicon-heart-empty">  姓名</span></th>
+                <th><span class="glyphicon glyphicon-heart-empty">  所属用户</span></th>
+                <th><span class="glyphicon glyphicon-home">  在读学校</span></th>
+                <th><span class="glyphicon glyphicon-time">  创建时间</span></th>
+                <th><span class="glyphicon glyphicon-tag">  学校监控</span></th>
+                <th><span class="glyphicon glyphicon-tag">  监管时间</span></th>
+                <th><span class="glyphicon glyphicon-tag">  领走时间</span></th>
+                <th><span class="glyphicon glyphicon-cog">  操作</span></th>
+            </tr>
+            <tr class="animate_item" ng-repeat="single in selectPage.data">
+                <td>{{single.child_id}}</td>
+                <td>{{single.child_name}}</td>
+                <td>{{single.user_username}}</td>
+                <td>{{single.course_name}}</td>
+                <td>{{single.child_create_time}}</td>
+                <td>{{single.monitor_name}}</td>
+                <td>{{single.child_start}}</td>
+                <td>{{single.child_end}}</td>
+                <td>
+                    <button class="btn btn-info btn-sm " ng-click="goDetail(single.child_id)">详情</button>
+                    <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#distributionSchool{{single.child_id}}">
+                        分配学校
+                    </button>
+                    <!-- Modal 分配学校-->
+                    <div class="modal fade" id="distributionSchool{{single.child_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel1">给孩子分配学校</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <select id="{{single.child_id}}_school" class="form-control" ng-model="single.child_course" ng-options="course.course_id as course.course_name for course in courseData['data']">
+                                    </select>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-warning" data-dismiss="modal" ng-click="distributionSchool(single.child_id)">提交</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+        </table>
+        <nav>
+            当前第 {{ selectPage.page.nowPage }} 页 | 总计 {{ selectPage.page.totalPage }} 页
+            <ul class="pager">
+                <li><a ng-if="selectPage.page.nowPage>1"
+                       href="" ng-click="selectPage.previousPage()">前一页</a></li>
+
+                <li><a ng-if="selectPage.page.nowPage<selectPage.page.totalPage"
+                       href="" ng-click="selectPage.nextPage()">下一页</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<!-- Modal 添加儿童信息 -->
+<div class="modal fade" id="addChild" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">添加儿童信息</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">姓名</label>
+                        <div class="col-sm-10">
+                            <input type="text" ng-model="childName" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">年龄</label>
+                        <div class="col-sm-10">
+                            <input type="text" ng-model="childAge" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">所属用户</label>
+                        <div class="col-sm-10">
+                            <input type="text" ng-model="childUser" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">开始时间</label>
+                        <div class="col-sm-10">
+                            <input type="text" ng-model="childStart" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">结束时间</label>
+                        <div class="col-sm-10">
+                            <input type="text" ng-model="childEnd" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">选择学校</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" ng-model="childCourse">
+                                <option ng-repeat="course in courseData['data']" name="childCourse" value="{{course.course_id}}">{{course.course_name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" ng-click="addChild()">添加</button>
+            </div>
+        </div>
+    </div>
+</div>
+

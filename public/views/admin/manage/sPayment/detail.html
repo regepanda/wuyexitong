@@ -1,0 +1,130 @@
+<p id="sPayment_detail">
+
+    <div class="col-sm-12">
+        <nav class="pull-right">
+            <ul class="pagination">
+                <li>
+                    <a ng-click="goIndex()"
+                       aria-label="Previous">
+                        <span class="glyphicon glyphicon-chevron-left"  aria-hidden="true"></span>
+                    </a>
+                </li>
+                <li>
+                    <a  ng-click="getData()">
+                        <span class="glyphicon glyphicon-refresh"  aria-hidden="true"></span>
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+        <h2>支付单详情</h2>
+    </div>
+    <div class="col-sm-5">
+        <h3>基本信息：</h3>
+        <p>id：{{id}}</p>
+        <p>支付类型：{{detailData.class_name}}</p>
+        <p>支付单创建时间：{{detailData.payment_create_time}}</p>
+        <p>支付单更新时间：{{detailData.payment_update_time}}</p>
+        <p>支付时间：{{detailData.payment_pay_time}}</p>
+        <p>支付价格：{{detailData.payment_price}}</p>
+    </div>
+    <div class="col-sm-5">
+        <h3>基本信息：</h3>
+        <p>预支付订单：{{detailData.payment_prepay_id}}</p>
+        <p>原始支付单信息：{{detailData.payment_origin_data}}</p>
+        <p>支付单说明：{{detailData.payment_intro}}</p>
+        <p>当前支付状态：<b>{{detailData.status_name}}</b></p>
+    </div>
+    <div class="col-sm-2">
+        <p class="col-sm-4">
+            <h3>操作：</h3>
+            <p>
+                <button ng-show="detailData.status_name == keywordStatusMap[1   ]" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#update">
+                    修改
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="update" tabindex="-1" role="dialog" aria-labelledby="updateLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="updateLabel">修改支付信息</h4>
+                            </div>
+                            <div class="modal-body">
+                                <form class="form-horizontal">
+                                    <div class="form-group">
+                                        <label for="inputEmail3" class="col-sm-2 control-label">支付价格</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" ng-model="detailData.payment_price" class="form-control" id="inputEmail3">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                <button type="button" ng-click="paymentUpdate()" class="btn btn-primary" data-dismiss="modal"> 修改 </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p>
+            <p>
+                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete">
+                    <span class="glyphicon glyphicon-trash">删除</span>
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="deleteLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="deleteLabel">删除支付单</h4>
+                            </div>
+                            <div class="modal-body">
+                                警告！你将要删除该条支付单！是否继续？
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                <button type="button" ng-click="paymentDelete()" class="btn btn-danger">删除</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p>
+            <p>
+                <button data-toggle="modal" data-target="#setStatusAlreadyPay" type="button" ng-if="detailData.status_name == keywordStatusMap[1]" class="btn btn-warning">已支付</button>
+                <button type="button" ng-if="detailData.status_name == keywordStatusMap[2]" ng-click="setStatusAskReturnPay()" class="btn btn-warning">申请退款</button>
+                <button type="button" ng-if="detailData.status_name == keywordStatusMap[14]" ng-click="setStatusInReturnPay()" class="btn btn-warning">退款中</button>
+                <button type="button" ng-if="detailData.status_name == keywordStatusMap[4]" ng-click="setStatusAlreadyReturnPay()" class="btn btn-warning">退款完成</button>
+
+            </p>
+            <p>
+                <button type="button" ng-if="detailData.status_name == keywordStatusMap[14]" class="btn btn-default btn-xs" ng-click="setStatusAlreadyPay()">返回已支付</button>
+                <button type="button" ng-if="detailData.status_name == keywordStatusMap[1]" ng-click="setStatusCancelPay()" class="btn btn-default btn-xs">取消支付</button>
+            </p>
+        </p>
+    </div>
+</p>
+
+<!-- Modal已支付 -->
+<div ng-show="detailData.payment_status == 1" class="modal fade" id="setStatusAlreadyPay" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">切换到已支付状态</h4>
+            </div>
+            <div class="modal-body">
+                警告！你确定将当前状态切换到已支付状态吗？
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" ng-click="setStatusAlreadyPay()" data-dismiss="modal">已支付</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,236 @@
+<div id="sCourse_index">
+    <div class="col-sm-12">
+        <nav class="pull-right">
+            <ul class="pagination">
+                <li>
+                    <a ng-click="selectPage.getLastData()"
+                       ng-if="selectPage.lastCache.length>0" aria-label="Previous">
+                        <span class="glyphicon glyphicon-chevron-left"  aria-hidden="true"></span>
+                    </a>
+                </li>
+                <li>
+                    <a ng-click="selectPage.getData()" >
+                        <span class="glyphicon glyphicon-refresh"  aria-hidden="true"></span>
+                    </a>
+                </li>
+                <li>
+                    <a  ng-click="selectPage.getNextData()" aria-label="Next"
+                        ng-if="selectPage.nextCache.length>0">
+                        <span class="glyphicon glyphicon-chevron-right"  aria-hidden="true"></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <h2>查看学校信息</h2>
+    </div>
+    <div class="col-sm-12">
+
+        <form class="form-inline">
+
+            <button type="button" class="btn-success btn" data-toggle="modal" data-target="#addCourse">
+                添加学校信息
+            </button>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    排序:{{selectPage.limit["sort"]}} <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="" ng-click="selectPage.changeLimit('sort','course_id')">时间</a></li></ul>
+            </div>
+
+            <label class=" pull-right">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-click="selectPage.toggleSort()" ng-checked="selectPage.limit.desc"> 倒序
+                    </label>
+                </div>
+            </label>
+
+
+        </form>
+        <br>
+        <table class="table table-hover table-bordered">
+            <tr>
+                <th><span class="glyphicon glyphicon-tag">  ID</span></th>
+                <th><span class="glyphicon glyphicon-heart-empty">  学校名</span></th>
+                <th><span class="glyphicon glyphicon-home">  学校介绍</span></th>
+                <th><span class="glyphicon glyphicon-home">  学校地址</span></th>
+                <th><span class="glyphicon glyphicon-time">  学校日期</span></th>
+                <th><span class="glyphicon glyphicon-time">  学校监控</span></th>
+                <th><span class="glyphicon glyphicon-cog">  操作</span></th>
+            </tr>
+            <tr class="animate_item" ng-repeat="single in selectPage.data">
+                <td>{{single.course_id}}</td>
+                <td>{{single.course_name}}</td>
+                <td>{{single.course_school}}</td>
+                <td>{{single.course_position}}</td>
+                <td>{{single.course_date}}</td>
+                <td>{{single.monitor_name}}</td>
+                <td>
+                    <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#update{{single.course_id}}">
+                        修改
+                    </button>
+                    <!-- Modal 修改课程信息-->
+                    <div class="modal fade" id="update{{single.course_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">修改学校信息</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">学校名</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" ng-model="single.course_name" id="{{single.course_id}}_course_name" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">学校介绍</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" ng-model="single.course_school" id="{{single.course_id}}_course_school" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">学校地点</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" ng-model="single.course_position" id="{{single.course_id}}_course_position" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">学校日期</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" ng-model="single.course_date" id="{{single.course_id}}_course_date" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">选择监控</label>
+                                            <div class="col-sm-10">
+                                                <select id="{{single.course_id}}_course_monitor" class="form-control" ng-model="single.course_monitor" ng-options="monitor.monitor_id as monitor.monitor_name for monitor in monitorData['data']">
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-warning" ng-click="updateCourse(single.course_id)" data-dismiss="modal">修改</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete{{single.course_id}}">
+                        删除
+                    </button>
+                    <!-- Modal 删除课程-->
+                    <div class="modal fade" id="delete{{single.course_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel3">删除课程</h4>
+                                </div>
+                                <div class="modal-body">
+                                    警告！此操作危险，确认继续？
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-danger" ng-click="deleteCourse(single.course_id)">删除</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#appointMonitor{{single.course_id}}">
+                        指定视频监控
+                    </button>
+                    <!-- Modal 指定视频监控-->
+                    <div class="modal fade" id="appointMonitor{{single.course_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel4">指定视频监控</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <select id="{{single.course_id}}_monitor" class="form-control" ng-model="single.course_monitor" ng-options="monitor.monitor_id as monitor.monitor_name for monitor in monitorData['data']">
+                                    </select>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-info" ng-click="appointMonitor(single.course_id)" data-dismiss="modal">提交</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+
+        </table>
+        <nav>
+            当前第 {{ selectPage.page.nowPage }} 页 | 总计 {{ selectPage.page.totalPage }} 页
+            <ul class="pager">
+                <li><a ng-if="selectPage.page.nowPage>1"
+                       href="" ng-click="selectPage.previousPage()">前一页</a></li>
+
+                <li><a ng-if="selectPage.page.nowPage<selectPage.page.totalPage"
+                       href="" ng-click="selectPage.nextPage()">下一页</a></li>
+            </ul>
+        </nav>
+
+    </div>
+</div>
+
+
+<!-- Modal添加课程信息 -->
+<div class="modal fade" id="addCourse" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel1">添加学校信息</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">学校名</label>
+                        <div class="col-sm-10">
+                            <input type="text" ng-model="courseName" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">学校介绍</label>
+                        <div class="col-sm-10">
+                            <input type="text" ng-model="courseSchool" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">学校地点</label>
+                        <div class="col-sm-10">
+                            <input type="text" ng-model="coursePosition" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">学校日期</label>
+                        <div class="col-sm-10">
+                            <input type="text" ng-model="courseDate" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">选择监控</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" ng-model="courseMonitor" ng-options="monitor.monitor_id as monitor.monitor_name for monitor in monitorData['data']">
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" ng-click="addCourse()" data-dismiss="modal">添加</button>
+            </div>
+        </div>
+    </div>
+</div>

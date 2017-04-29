@@ -1,0 +1,6 @@
+-1 通用错误
+0 正确
+1 accesstoken 过期，需要从新获取
+2 accesstoken 错误
+3 权限错误
+4 字段非法

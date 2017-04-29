@@ -1,0 +1,35 @@
+
+Request:
+    public static function addRequest($requestUser,$requestClass,$userIntro)
+        创建一个请求
+        返回一个请求对象，或者false
+    public function updateUserIntro($userIntro)
+        更新用户描述
+        返回true false
+    public function updateAdminIntro($adminIntro)
+        返回管理员描述
+        返回true false
+    public function setStatusCommit($userIntro)
+        设定状态为提交，一般用不上，因为添加的时候自动加了
+        返回true false
+    public function setStatusReadyHandle($adminIntro,$price=null)
+        设定状态为准备处理，即客服已经确定价格，并发送给用户，等待用户付款
+        可以多次调用该函数，修改价格，或者描述，
+        如果$price为空，将不会改动价格，无论之前有价格或者无价格
+        如果有$price，会检查是否已经生成支付单，如果没有，按照价格生成一个（使用用户的默认账户），如果有，更改其价格等于$price
+        返回true false
+    public function setStatusInHandle()
+        修改状态到处理中
+        返回true false
+    public function setStatusHaveHandle()
+        修改状态到 处理完成
+        返回true false
+    public function setStatusCancel()
+        修改状态到取消请求，只有当前请求在
+        6已提交
+        7准备处理 可以切换到这个状态
+        返回 true false
+
+    public function cancel()
+        取消请求，联通关联的支付单
+        返回true /false

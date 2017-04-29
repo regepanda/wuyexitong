@@ -1,0 +1,134 @@
+<div id="sTax_index">
+    <div class="col-sm-12">
+        <nav class="pull-right">
+            <ul class="pagination">
+                <li>
+                    <a ng-click="selectPage.getLastData()"
+                       ng-if="selectPage.lastCache.length>0" aria-label="Previous">
+                        <span class="glyphicon glyphicon-chevron-left"  aria-hidden="true"></span>
+                    </a>
+                </li>
+                <li>
+                    <a ng-click="selectPage.getData()" >
+                        <span class="glyphicon glyphicon-refresh"  aria-hidden="true"></span>
+                    </a>
+                </li>
+                <li>
+                    <a  ng-click="selectPage.getNextData()" aria-label="Next"
+                        ng-if="selectPage.nextCache.length>0">
+                        <span class="glyphicon glyphicon-chevron-right"  aria-hidden="true"></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <h2>查看缴费信息</h2>
+    </div>
+    <div class="col-sm-12">
+
+        <form class="form-inline">
+            <a class="btn-success btn" ng-click="aTax()">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                手动缴费
+            </a>
+
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    分类:{{keywordClassMap[selectPage.limit["class"]]}} <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a
+                            ng-click="selectPage.changeLimit('class',null)">全部分类</a>
+                    </li>
+                    <li ng-repeat="class in classData"><a
+                            ng-click="selectPage.changeLimit('class',class.class_id)">{{class.class_name}}</a>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    状态:{{keywordStatusMap[selectPage.limit["status"]]}} <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a
+                            ng-click="selectPage.changeLimit('status',null)">全部状态</a>
+                    </li>
+                    <li ng-repeat="status in statusData"><a
+                            ng-click="selectPage.changeLimit('status',status.status_id)">{{status.status_name}}</a>
+                    </li>
+                </ul>
+
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    排序:{{selectPage.limit["sort"]}} <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="" ng-click="selectPage.changeLimit('sort','request_id')">时间</a></li>
+
+                </ul>
+
+            </div>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle"
+                        aria-haspopup="true" aria-expanded="false" ng-click="selectPage.getData()">确定搜索
+                </button>
+                &nbsp;
+                <input type="text" ng-model="selectPage.limit.id" class="form-control" id="exampleInputEmail2" placeholder="输入缴费单id">
+            </div>
+
+
+            <label class=" pull-right">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-click="selectPage.toggleSort()" ng-checked="selectPage.limit.desc"> 倒序
+                    </label>
+                </div>
+            </label>
+
+
+        </form>
+        <br>
+        <table class="table table-hover table-bordered">
+            <tr>
+                <th><span class="glyphicon glyphicon-user">  缴费用户</span></th>
+                <th><span class="glyphicon glyphicon-paperclip">  缴费类型</span></th>
+                <th><span class="glyphicon glyphicon-th-large">  缴费状态</span></th>
+                <th><span class="glyphicon glyphicon-time">  创建时间</span></th>
+                <th><span class="glyphicon glyphicon-usd">  金额</span></th>
+                <th><span class="glyphicon glyphicon-phone-alt">  联系电话</span></th>
+                <th><span class="glyphicon glyphicon-cog">  操作</span></th>
+            </tr>
+            <tr class="animate_item" ng-repeat="single in selectPage.data" >
+                <td>{{single.user_username}}</td>
+                <td>{{single.class_name}}</td>
+                <td>{{single.status}}</td>
+                <td>{{single.tax_create_time}}</td>
+                <td>{{single.payment_price}}</td>
+                <td>{{single.user_phone}}</td>
+                <td><button class="btn btn-info btn-sm " ng-click="goDetail(single.tax_id)">详情</button></td>
+
+            </tr>
+        </table>
+        <nav>
+            当前第 {{ selectPage.page.nowPage }} 页 | 总计 {{ selectPage.page.totalPage }} 页
+            <ul class="pager">
+                <li><a ng-if="selectPage.page.nowPage>1"
+                       href="" ng-click="selectPage.previousPage()">前一页</a></li>
+
+                <li><a ng-if="selectPage.page.nowPage<selectPage.page.totalPage"
+                       href="" ng-click="selectPage.nextPage()">下一页</a></li>
+            </ul>
+        </nav>
+
+
+    </div>
+
+
+</div>
+

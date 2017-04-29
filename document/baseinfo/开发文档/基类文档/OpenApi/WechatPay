@@ -1,0 +1,32 @@
+public static function addPayment($fee,$paymentId,$ip)
+    请求微信端，添加支付单，需要传入金额，已生成的系统内部支付单号，以及客户端ip
+    返回结构
+    []
+     * |-status
+     * |-message
+     * 如果成功
+     * |-prepay_id
+     * |-trade_type
+     * 只要通讯成功就会保存的数据
+     * |-request_data
+     * |-receive_data
+
+public static function alreadyPay()
+    微信服务器支付成功回调函数，自动处理相关的参数并判断，如果支付成功
+    则调用alreadyPayDatabaseOperate($receiveObject)，传入解析好的simpleXML对象
+
+
+
+public static function alreadyPayDatabaseOperate($receiveObject)
+    微信服务端回调后，本应用服务器数据库的数据更新相关工作在这里进行，函数会输出相关格式数据并结束本次请求
+    这个函数在每一个系统中都应该自定义
+
+
+public static function generateSign(&$data)
+    用于生成微信签名，注意传入的data是引用会改变内部顺序到字典序 返回一个字符串
+
+
+public static function checkSign($sign,$data)
+    验证签名是否有效，返回bool，依赖 &generateSign(&$data)
+
+

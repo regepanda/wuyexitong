@@ -1,0 +1,127 @@
+<div>
+    <div class="col-sm-12">
+        <nav class="pull-right">
+            <ul class="pagination">
+                <li>
+                    <a ng-click="goIndex()"
+                        aria-label="Previous">
+                        <span class="glyphicon glyphicon-chevron-left"  aria-hidden="true"></span>
+                    </a>
+                </li>
+                <li>
+                    <a ng-click="getData()" >
+                        <span class="glyphicon glyphicon-refresh"  aria-hidden="true"></span>
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+        <h2>房屋队列</h2>
+    </div>
+    <div class="col-sm-6">
+        <p>房屋ID：{{houseData[0].house_id}}</p>
+        <p>面积：{{houseData[0].house_area}} 平米</p>
+        <p>地址：{{houseData[0].house_address}}</p>
+        <p>信息创建时间：{{houseData[0].house_create_time}}</p>
+        <p>信息更新时间：{{houseData[0].house_update_time}}</p>
+        <p>房子可缴费次数：{{houseData[0].house_cantax_time}}</p>
+        <p>拥有用户：{{houseData[0].house_user}}</p>
+        <p>缴费明细：{{houseData[0].house_other_data}}</p>
+        <p>是否审核：{{houseData[0].house_check?"是":"否"}}</p>
+        <input type="hidden" ng-model="houseData[0].house_community">
+        &nbsp;
+        <h4>所在小区信息</h4>
+        <p>小区ID：{{detailCommunityData[0].community_id}}</p>
+        <p>小区名：{{detailCommunityData[0].community_name}}</p>
+        <p>小区地址：{{detailCommunityData[0].community_address}}</p>
+        <p>小区介绍：{{detailCommunityData[0].community_intro}}</p>
+        <p>小区城市：{{detailCommunityData[0].community_city}}</p>
+        <p>小区省份：{{detailCommunityData[0].community_province}}</p>
+        <p>信息创建时间：{{detailCommunityData[0].community_create_time}}</p>
+        <p>信息更新时间：{{detailCommunityData[0].community_update_time}}</p>
+        &nbsp;
+        <h4>所属用户信息</h4>
+        <p>用户ID：{{detailUserData[0].user_id}}</p>
+        <p>用户姓名：{{detailUserData[0].user_username}}</p>
+        <p>用户电话：{{detailUserData[0].user_phone}}</p>
+        <p>性别：{{detailUserData[0].user_sex}}</p>
+        <p>生日：{{detailUserData[0].user_birthday}}</p>
+        <p>用户注册时间：{{detailUserData[0].user_create_time}}</p>
+        <p>最新休息修改：{{detailUserData[0].user_update_time}}</p>
+        <div>
+            <button class="btn btn-success btn-sm" ng-if="!houseData[0].house_check" ng-click="toggleIsCanTax()">{{isCanTax?"该房产不支持缴费":"该房产支持缴费"}}</button>
+            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#up_house_{{houseData[0].house_id}}">房子修改</button>
+            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#updateDataModal" ng-if="!houseData[0].house_check">审核通过</button>
+
+
+            <!-- Modal -->
+            <div class="modal fade" id="updateDataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">确认审核通过</h4>
+                        </div>
+                        <div class="modal-body">
+                            <h2>确认审核通过？</h2>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="button" class="btn btn-primary"  ng-click="updateData()">审核通过</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="up_house_{{houseData[0].house_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">当前房子id：{{houseData[0].house_id}}</h4>
+                        </div>
+                        <div class="modal-body">
+                            <h4>请输入新的房子区域</h4>
+                            <input type="hidden" ng-model="houseData[0].house_id">
+                            <input type="hidden" ng-model="houseData[0].house_community">
+                            <input type="text" class="form-control" ng-model="houseData[0].house_area">
+                            <h4>请输入新的房子地址</h4>
+                            <input type="text" class="form-control" ng-model="houseData[0].house_address">
+                            <h4>请输入新的房子可以缴费的次数</h4>
+                            <input type="text" class="form-control" ng-model="houseData[0].house_cantax_time">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button  class="btn btn-success btn-sm" ng-click="updateHouse()" data-dismiss="modal">提交</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">返回</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div></br>
+
+        <div class="animate_component" ng-if="isCanTax">
+            <div class="form-group">
+                <label >每月物业费用</label>
+                <input type="text" ng-model="houseUpdateData.house_tax" class="form-control">
+            </div>
+
+            <button id="addDetail" ng-show="!houseData[0].house_check" class="btn btn-info btn-sm"> 添加审核明细 </button>
+            <script language="JavaScript">
+                $(function(){
+                    var id = 1;
+                    $("#addDetail").click(function(){
+                        var content = '<div class="panel panel-default"> <div class="panel-body shadow_div"><div class="form-group"> <label>明细主题：</label> <input type="text" id="name_'+id+'" class="form-control" placeholder="垃圾费"></div> <div class="form-group"> <label>明细内容：</label> <input type="text" id="content_'+id+'" class="form-control" placeholder="您这个月的垃圾费是5.5元"> </div> </div></div></br>';
+                        $("#taxMx").append(content);
+                        id++;
+                    });
+                });
+            </script>
+            <!--添加缴费明细界面-->
+            <div id="taxMx" class="col-sm-12" ng-show="isCanTax">
+                </br>
+            </div>
+        </div>
+    </div>
+</div>
+

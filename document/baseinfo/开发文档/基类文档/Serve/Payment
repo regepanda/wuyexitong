@@ -1,0 +1,35 @@
+
+Payment:
+    public static function addPayment($accountId,$price)
+        添加一个支付单，需要一个账户
+        成功返回一个Tax对象 /false
+
+    public function updatePrice($price)
+        修改价格
+        成功返回true，失败false
+    public function setStatusAlreadyPay($class,$prepayId=null, $originData=null)
+        设定状态已支付
+        填入分类信息（支付宝，天翼支付，微信支付），并存入来去账信息（通常是json）
+        改变这个状态会尝试去修改Request/Payment到下一个状态（处理中，已付费）
+    public function setStatusCancelPay()
+        取消支付
+        只有还没有付款的订单可以取消
+        会尝试取消掉相关联的Request Tax单
+        成功true 失败false
+    public function setStatusAskReturnPay($because=null)
+        切换状态到 请求退款
+        已支付的支付单才可以切换
+        成功true 失败false
+    public function setStatusInReturnPay()
+        设定状态 退款中
+        请求退款的才可以切换
+        成功true 失败false
+    public function setStatusAlreadyReturnPay()
+        设定状态 已退款
+        退款中的才能切换
+        成功true
+        失败false
+
+    public function isPay()
+        检查是否已经支付
+        返回 true/false

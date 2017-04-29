@@ -1,0 +1,187 @@
+<div id="sRequest_detail">
+
+    <div class="col-sm-12">
+        <nav class="pull-right">
+            <ul class="pagination">
+                <li>
+                    <a ng-click="goIndex()"
+                       aria-label="Previous">
+                        <span class="glyphicon glyphicon-chevron-left"  aria-hidden="true"></span>
+                    </a>
+                </li>
+                <li>
+                    <a ng-click="getData()">
+                        <span  class="glyphicon glyphicon-refresh"  aria-hidden="true"></span>
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+
+        <h2>用户详情  |  <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#up_{{id}}" class="zcb">修改</button></h2>
+    </div>
+
+    <div class="modal fade" id="up_{{id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" class="zc">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">当前用户ID：{{id}}</h4>
+                </div>
+                    <div class="modal-body">
+                        <h4>请输入新的用户名</h4>
+                        <input type="hidden" ng-model="detailUserData.user_id">
+                        <input type="text " class="form-control" ng-model="detailUserData.user_username"  required autofocus>
+                        <h4>请输入新的用户昵称</h4>
+                        <input type="text " class="form-control" ng-model="detailUserData.user_nickname" placeholder="nickname" required autofocus>
+                        <h4>请输入新的用户电话</h4>
+                        <input type="text " class="form-control" ng-model="detailUserData.user_phone" placeholder="user_phone" required autofocus>
+                        <h4>请输入新的用户备用电话</h4>
+                        <input type="text " id="inputText" class="form-control" ng-model="detailUserData.user_phone_backup" placeholder="user_phone_backup" required autofocus>
+                        <h4>请选择新的用户组</h4>
+                        <select class="form-control" ng-model="detailUserData.user_group" ng-options="single.group_id as single.group_name for single in detailUserGroupData ">
+                        </select>
+                    </div>
+                <div class="modal-footer">
+                    <button  class="btn btn-success btn-sm" ng-click="updateUser()" data-dismiss="modal">提交</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">返回</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   <div>
+       <h3>用户详细信息</h3>
+       <table class="table table-hover table-bordered">
+           <tr class="info">
+               <td><h4>id</h4></td>
+               <td><h4>生日</h4></td>
+               <td><h4>电话</h4></td>
+               <td><h4>备用电话</h4></td>
+               <td><h4>用户更新时间</h4></td>
+               <td><h4>用户所在组</h4></td>
+           </tr>
+
+           <tr class="active">
+               <td> <p>{{id}}</p></td>
+               <td> <p>{{detailUserData.user_birthday}}</p></td>
+               <td><p>{{detailUserData.user_phone}}</p></td>
+               <td> <p>{{detailUserData.user_phone_backup}}</p></td>
+               <td> <p>{{detailUserData.user_update_time}}</p></td>
+               <td><p>{{keywordUserGroupMap[detailUserData.user_group]}}</p></td>
+           </tr>
+       </table>
+
+       <h3>用户请求信息</h3>
+       <table class="table table-hover table-bordered">
+           <tr class="info">
+               <td><h4>请求类型</h4></td>
+               <td><h4>请求创建时间</h4></td>
+               <td><h4>请求更新时间</h4></td>
+               <td><h4>操作</h4></td>
+           </tr>
+           <tr class="active" ng-repeat="single in detailRequestData.data">
+               <td> <p>{{keywordClassMap[single.request_class]}}</p></td>
+               <td> <p>{{single.request_create_time}}</p></td>
+               <td><p>{{single.request_update_time}}</p></td>
+               <td><a class="btn btn-sm btn-success" href="/admin_sRequest#/detail/{{single.request_id}}">查看详情</a></td>
+           </tr>
+       </table>
+
+       <h3>用户车辆信息</h3>
+       <table class="table table-hover table-bordered">
+           <tr class="info">
+               <td><h4>id</h4></td>
+               <td><h4>车名</h4></td>
+               <td><h4>车品牌</h4></td>
+               <td><h4>车牌号</h4></td>
+               <td><h4>车型号</h4></td>
+               <td><h4>车颜色</h4></td>
+               <td><h4>车保险开始时间 </h4>
+               <td><h4>车保险结束时间 </h4>
+               <td><h4>车创建时间</h4></td>
+               <td><h4>车更新时间</h4></td>
+               <td><h4>车是否审核</h4></td>
+               <td><h4>其他</h4></td>
+           </tr>
+           <tr class="active" ng-repeat="single in detailCarData.data">
+               <td><p>{{single.car_id}}</p></td>
+               <td><p>{{single.car_name}}</p></td>
+               <td><p>{{single.car_brand}}</p></td>
+               <td><p>{{single.car_plate_id}}</p></td>
+               <td><p>{{single.car_model}}</p></td>
+               <td><p>{{single.car_color}}</p></td>
+               <td><p>{{single.car_insurance_start_time}}</p></td>
+               <td><p>{{single.car_insurance_end_time}}</p></td>
+               <td><p>{{single.car_create_time}}</p></td>
+               <td><p>{{single.car_update_time}}</p></td>
+               <td><p>{{keywordCheckMap[single.car_check]}}</p></td>
+               <td><p>{{single.car_other_data}}</p></td>
+           </tr>
+       </table>
+
+
+       <h3>用户住房信息</h3>
+       <table class="table table-hover table-bordered">
+           <tr class="info">
+               <td><h4>住房面积</h4></td>
+               <td><h4>住房地址</h4></td>
+               <td><h4>住房缴费金额</h4></td>
+               <td><h4>住房是否支持缴费</h4></td>
+               <td><h4>住房可缴费次数</h4></td>
+               <td><h4>住房是否审核</h4></td>
+               <td><h4>住房创建时间</h4></td>
+               <td><h4>住房更新时间</h4></td>
+               <td><h4>住房缴费说明</h4></td>
+               <td><h4>其他</h4></td>
+           </tr>
+           <tr class="active" ng-repeat="single in detailHouseData.data">
+               <td> <p>{{single.house_area}}</p></td>
+               <td> <p>{{single.house_address}}</p></td>
+               <td><p>{{single.house_tax}}</p></td>
+               <td><p>{{keywordCheckMap[single.house_can_tax]}}</p></td>
+               <td><p>{{single.house_cantax_timel}}</p></td>
+               <td><p>{{keywordCheckMap[single.house_check]}}</p></td>
+               <td><p>{{single.house_create_time}}</p></td>
+               <td><p>{{single.house_update_time}}</p></td>
+               <td><p>{{single.house_intro_tax}}</p></td>
+               <td><p>{{single.house_other_data}}</p></td>
+           </tr>
+       </table>
+
+       <h3>用户支付单信息</h3>
+       <table class="table table-hover table-bordered">
+           <tr class="info">
+               <td><h4>支付账户</h4></td>
+               <td><h4>支付金额</h4></td>
+               <td><h4>支付状态</h4></td>
+               <td><h4>操作</h4></td>
+           </tr>
+           <tr class="active" ng-repeat="single in detailPaymentData.data">
+               <td> <p>{{single.payment_account}}</p></td>
+               <td> <p>{{single.payment_price}}</p></td>
+               <td><p>{{keywordStatusMap[single.payment_status]}}</p></td>
+               <td><a class="btn btn-sm btn-success" href="/admin_sPayment#/detail/{{single.payment_id}}">查看详情</a></td>
+           </tr>
+       </table>
+
+       <h3>用户缴费记录</h3>
+       <table class="table table-hover table-bordered">
+           <tr class="info">
+               <td><h4>缴费状态</h4></td>
+               <td><h4>缴费金额</h4></td>
+               <td><h4>缴费截止时间</h4></td>
+               <td><h4>操作</h4></td>
+           </tr>
+           <tr class="active"  ng-repeat="single in detailTaxData.data">
+               <td> <p>{{keywordStatusMap[single.tax_status]}}</p></td>
+               <td> <p>{{single.tax_payment}}</p></td>
+               <td><p>{{single.tax_deadline}}</p></td>
+               <td><a class="btn btn-sm btn-success" href="/admin_sTax#/detail/{{single.tax_id}}">查看详情</a></td>
+           </tr>
+       </table>
+   </div>
+
+</div>
+
+

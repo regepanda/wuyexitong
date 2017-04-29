@@ -1,0 +1,5 @@
+Account:
+    public static function addAccount($user,$class=15)
+        创建一个账户，默认分类15，即默认账户
+        返回账户对象 /false
+

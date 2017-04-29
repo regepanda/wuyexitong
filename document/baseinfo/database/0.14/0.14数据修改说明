@@ -1,0 +1,11 @@
+payment删除payment_by payment_to payment_user_data
+新增 payment_origin_data //表示第三方平台下单系统的订单相关信息
+    payment_prepay_id  //预支付订单号
+
+新增了tax的字段 tax_month表示缴费的月份
+
+payment表新加字段 payment_intro 介绍这个支付单
+
+house添加
+每月缴费价格 house_tax
+是否支持缴费 house_can_tax

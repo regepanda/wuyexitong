@@ -1,0 +1,28 @@
+Tax:
+    public static function addTax($user,$class,$time,$price,$intro=null)
+        创建缴费单，使用用户的默认账户创建支付单
+        返回一个支付单对象，或者false
+
+    public function setStatusHavePay()
+        切换状态到已经支付
+        返回true/false
+    public function setStatusCancelPay()
+        切换状态到取消支付
+        返回true/false
+    public function setStatusOutDate()
+        切换状态到过期：注意这个函数并不会检查过期情况，只是简单的改变状态
+        返回true/false
+
+    public function checkOutDate()
+        检查是否过期，如果过期，则在数据库中切换状态
+        过期true 没过期false
+
+    public static function checkAllOutDate()
+        检查数据库中所有可能过期的项，如果过期将其设置为过期状态
+        返回改变数量
+
+    public function cancel()
+        取消订单，且完成支付单状态的转变，适合外部接口调用
+
+    public static function addTaxByUserAsk($user,$class,$price,$month,$intro=null)
+        另外一种缴费单生成方式，用于用户主动请求缴费的情况

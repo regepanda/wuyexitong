@@ -1,0 +1,229 @@
+<div id="sPayment_index">
+    <div class="col-sm-12">
+        <nav class="pull-right">
+            <ul class="pagination">
+                <li>
+                    <a ng-click="selectPage.getLastData()"
+                       ng-if="selectPage.lastCache.length>0" aria-label="Previous">
+                        <span class="glyphicon glyphicon-chevron-left"  aria-hidden="true"></span>
+                    </a>
+                </li>
+                <li>
+                    <a ng-click="selectPage.getData()" >
+                        <span class="glyphicon glyphicon-refresh"  aria-hidden="true"></span>
+                    </a>
+                </li>
+                <li>
+                    <a  ng-click="selectPage.getNextData()" aria-label="Next"
+                        ng-if="selectPage.nextCache.length>0">
+                        <span class="glyphicon glyphicon-chevron-right"  aria-hidden="true"></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <h2>
+            {{auditClass[selectPage.limit["class"]]}}
+        </h2>
+    </div>
+    <div class="col-sm-12">
+
+            <label class=" pull-right">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-click="selectPage.toggleSort()" ng-checked="selectPage.limit.desc"> 倒序
+                    </label>
+                </div>
+            </label>
+
+            <div>
+                <label class=" pull-right">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" ng-click="selectPage.toggleCheck()" ng-checked="selectPage.limit.check"> 未审核
+                        </label>
+                    </div>
+                </label>
+
+            </div>
+
+
+            </form>
+        <br>
+        <table class="table table-hover table-bordered"  ng-if="selectPage.sourceResponse.class == 1">
+            <tr>
+                <th><span class="glyphicon glyphicon-paperclip">  审核类型</span></th>
+                <th><span class="glyphicon glyphicon-globe">  地址</span></th>
+                <th><span class="glyphicon glyphicon-tree-conifer">  面积</span></th>
+                <th><span class="glyphicon glyphicon-time">  更新时间</span></th>
+                <th><span class="glyphicon glyphicon-cog">  操作</span></th>
+            </tr>
+            <tr class="animate_item" ng-repeat="single in selectPage.data">
+                <td>房屋审核</td>
+                <td>{{single.house_address}}</td>
+                <td>{{single.house_area}}</td>
+                <td>{{single.house_update_time}}</td>
+                <td><button class="btn btn-info btn-sm " ng-click="goDetail(1,single.house_id)">操作</button></td>
+
+            </tr>
+        </table>
+        <table class="table table-hover table-bordered" ng-if="selectPage.sourceResponse.class == 2">
+            <tr>
+                <th><span class="glyphicon glyphicon-paperclip">  审核类型</span></th>
+                <th><span class="glyphicon glyphicon-bold">  品牌</span></th>
+                <th><span class="glyphicon glyphicon-cog">  型号</span></th>
+                <th><span class="glyphicon glyphicon-resize-horizontal"> 车牌号</span></th>
+                <th><span class="glyphicon glyphicon-time">  更新时间</span></th>
+                <th><span class="glyphicon glyphicon-resize-horizontal"> 是否审核</span></th>
+                <th><span class="glyphicon glyphicon-cog">  操作</span></th>
+            </tr>
+            <tr class="animate_item" ng-repeat="single in selectPage.data">
+                <td>车辆审核</td>
+                <td>{{single.car_brand}}</td>
+                <td>{{single.car_model}}</td>
+                <td>{{single.car_plate_id}}</td>
+                <td>{{single.car_update_time}}</td>
+                <td>{{single.car_check?"是":"否"}}</td>
+                <input id="nowCarId" value="{{single.car_id}}" type="hidden"/>
+                <td>
+                    <button class="btn btn-info btn-sm " ng-click="goDetail(2,single.car_id)">操作</button>
+                    <!--<button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#updateCarCheck_{{single.car_id}}" ng-if="!selectPage.limit.check">审核通过</button>-->
+                    <!-- Modal -->
+                    <div class="modal fade" id="updateCarCheck_{{single.car_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">确认审核通过</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <h2>确认审核通过？</h2>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-primary" ng-click="updateCarCheck(single.car_id)" data-dismiss="modal">审核通过</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </td>
+
+            </tr>
+        </table>
+        <table class="table table-hover table-bordered" ng-if="selectPage.sourceResponse.class == 3">
+            <tr>
+                <th><span class="glyphicon glyphicon-paperclip">  审核类型</span></th>
+                <th><span class="glyphicon glyphicon-book">  姓名</span></th>
+                <th><span class="glyphicon glyphicon-book">  ID</span></th>
+                <th><span class="glyphicon glyphicon-file">  身份证号</span></th>
+                <th><span class="glyphicon glyphicon-time">  更新时间</span></th>
+                <th><span class="glyphicon glyphicon-cog">  操作</span></th>
+            </tr>
+            <tr class="animate_item" ng-repeat="single in selectPage.data">
+                <td>真实信息审核</td>
+                <td>{{single.info_name}}</td>
+                <td>{{single.info_id}}</td>
+                <td>{{single.info_ic_id}}</td>
+                <td>{{single.info_update_time}}</td>
+                <td>
+                    <button class="btn btn-info btn-sm " ng-click="goDetail(3,single.info_id)">操作</button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="updateUserCheck_{{single.info_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title">确认审核通过</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <h2>确认审核通过？</h2>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-primary" ng-click="updateUserCheck(single.info_id)" data-dismiss="modal">审核通过</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </td>
+            </tr>
+        </table>
+        <!--显示车位-->
+        <table class="table table-hover table-bordered"  ng-if="selectPage.sourceResponse.class == 4">
+            <tr>
+                <th><span class="glyphicon glyphicon-paperclip">  车位ID</span></th>
+                <th><span class="glyphicon glyphicon-paperclip">  所属用户</span></th>
+                <th><span class="glyphicon glyphicon-globe">  所属小区</span></th>
+                <th><span class="glyphicon glyphicon-tree-conifer">  剩余缴费次数</span></th>
+                <th><span class="glyphicon glyphicon-time">  更新时间</span></th>
+                <th><span class="glyphicon glyphicon-paperclip">  是否审核</span></th>
+                <th><span class="glyphicon glyphicon-cog">  操作</span></th>
+            </tr>
+            <tr class="animate_item" ng-repeat="single in selectPage.data">
+                <td>{{single.position_id}}</td>
+                <td>{{single.username}}</td>
+                <td>{{single.community_name}}</td>
+                <td>{{single.position_cantax_time}}</td>
+                <td>{{single.position_update_time}}</td>
+                <td>{{single.position_check?"是":"否"}}</td>
+                <td>
+                    <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deletePosition{{single.position_id}}">删除</button>
+                    <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#updateCarPositionCheck_{{single.position_id}}" ng-if="!single.position_check">审核通过</button>
+                    <!-- Modal 审核车位-->
+                    <div class="modal fade" id="updateCarPositionCheck_{{single.position_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title">确认审核通过</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <h2>确认审核通过？</h2>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-primary" ng-click="updateCarPositionCheck(single.position_id)" data-dismiss="modal">审核通过</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal 删除车位-->
+                    <div class="modal fade" id="deletePosition{{single.position_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title">确认删除</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <h2>确认删除？</h2>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-danger" ng-click="deletePosition(single.position_id)" data-dismiss="modal">删除</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <nav>
+            当前第 {{ selectPage.page.nowPage }} 页 | 总计 {{ selectPage.page.totalPage }} 页
+            <ul class="pager">
+                <li><a ng-if="selectPage.page.nowPage>1"
+                       href="" ng-click="selectPage.previousPage()">前一页</a></li>
+
+                <li><a ng-if="selectPage.page.nowPage<selectPage.page.totalPage"
+                       href="" ng-click="selectPage.nextPage()">下一页</a></li>
+            </ul>
+        </nav>
+
+
+    </div>
+
+
+</div>
+

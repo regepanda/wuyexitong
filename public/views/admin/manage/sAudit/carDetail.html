@@ -1,0 +1,90 @@
+<div class="col-sm-12">
+    <div class="col-sm-12">
+        <nav class="pull-right">
+            <ul class="pagination">
+                <li>
+                    <a ng-click="goIndex()"
+                       aria-label="Previous">
+                        <span class="glyphicon glyphicon-chevron-left"  aria-hidden="true"></span>
+                    </a>
+                </li>
+                <li>
+                    <a ng-click="getData()" >
+                        <span class="glyphicon glyphicon-refresh"  aria-hidden="true"></span>
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+        <h2>汽车队列</h2>
+    </div>
+    <div class="col-sm-12">
+        <p>车辆ID：{{carData[0].car_id}}</p>
+        <p>名称：{{carData[0].car_name}}</p>
+        <p>品牌：{{carData[0].car_brand}}</p>
+        <p>颜色：{{carData[0].car_color}}</p>
+        <p>型号：{{carData[0].car_model}}</p>
+        <p>创建时间：{{carData[0].car_create_time}}</p>
+        <p>更新时间：{{carData[0].car_update_time}}</p>
+        <p>保险开始时间：{{carData[0].car_insurance_start_time}}</p>
+        <p>保险结束时间：{{carData[0].car_insurance_end_time}}</p>
+        <p>车牌号：{{carData[0].car_plate_id}}</p>
+        <p>是否审核：{{carData[0].car_check?"是":"否"}}</p>
+
+        <div>
+          <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#updateDataModal" ng-if="!carData[0].car_check">审核通过</button>
+            <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#up_{{carData[0].car_id}}">汽车修改</button>
+            <!-- Modal -->
+            <div class="modal fade" id="updateDataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">确认审核通过</h4>
+                        </div>
+                        <div class="modal-body">
+                            <h2>确认审核通过？</h2>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="button" class="btn btn-primary"  ng-click="updateData()">审核通过</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+            <div class="modal fade" id="up_{{carData[0].car_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">当前汽车id：{{carData[0].car_id}}</h4>
+                        </div>
+                        <div class="modal-body">
+                            <h4>请输入新的汽车名</h4>
+                            <input type="hidden" ng-model="carData[0].car_id">
+                            <input type="text " class="form-control" ng-model="carData[0].car_name">
+                            <h4>请输入新的汽车品牌</h4>
+                            <input type="text " class="form-control" ng-model="carData[0].car_brand">
+                            <h4>请输入新的汽车颜色</h4>
+                            <input type="text " class="form-control" ng-model="carData[0].car_color">
+                            <h4>请输入新的汽车型号</h4>
+                            <input type="text "  class="form-control" ng-model="carData[0].car_model">
+                            <h4>请输入新的车牌号</h4>
+                            <input type="text " class="form-control" ng-model="carData[0].car_plate_id">
+                        </div>
+                        <div class="modal-footer">
+                            <button  class="btn btn-success btn-sm" ng-click="updateCar()" data-dismiss="modal">提交</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">返回</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+    </div>
+</div>

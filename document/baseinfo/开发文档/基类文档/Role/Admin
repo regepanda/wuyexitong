@@ -1,0 +1,7 @@
+Admin:
+    public static function login($username, $password)
+        登录验证，成功返回Admin对象，自动写入session
+        失败返回false
+    public function setSession()
+        将当前管理员信息写入session
+        失败返回false

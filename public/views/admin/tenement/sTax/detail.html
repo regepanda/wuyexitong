@@ -1,0 +1,183 @@
+
+<p id="sTax_detail">
+
+    <div class="col-sm-12">
+        <nav class="pull-right">
+            <ul class="pagination">
+                <li>
+                    <a ng-click="goIndex()"
+                       aria-label="Previous">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    </a>
+                </li>
+                <li>
+                    <a ng-click="getData()">
+                        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+        <h2>缴费详情</h2>
+    </div>
+    <div class="col-sm-4">
+        <h3>基本信息：</h3>
+
+        <p>id：{{id}}</p>
+
+        <p>类型：{{detailData.class_name}}</p>
+
+        <p>当前缴费状态：<b>{{detailData.status_name}}</b></p>
+
+        <p>价格：{{detailData.tax_price}}</p>
+
+        <p>缴费创建时间{{detailData.tax_create_time}}</p>
+    </div>
+    <div class="col-sm-4">
+        <h3>基本信息：</h3>
+
+        <p>缴费更新时间：{{detailData.tax_update_time}}</p>
+
+        <p>缴费用户：{{detailData.user_username}}</p>
+
+        <p>缴费介绍：{{detailData.tax_intro}}</p>
+    </div>
+    <div class="col-sm-4">
+        <p class="col-sm-4">
+
+        <h3>操作：</h3>
+
+        <p>
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#update">
+                <span class="glyphicon glyphicon-edit">修改</span>
+            </button>
+
+            <!-- Modal -->
+        <div class="modal fade" id="update" tabindex="-1" role="dialog" aria-labelledby="updateLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="updateLabel">修改缴费信息</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-2 control-label">价格</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="inputEmail3" ng-model="tax_price">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" ng-click="taxUpdate()" class="btn btn-primary" data-dismiss="modal"> 修改</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </p>
+        <p>
+            <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete">
+                <span class="glyphicon glyphicon-trash">删除</span>
+            </button>
+
+            <!-- Modal -->
+        <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="deleteLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="deleteLabel">删除缴费信息</h4>
+                    </div>
+                    <div class="modal-body">
+                        警告！你将要删除该条缴费信息！是否继续？
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" ng-click="taxDelete()" class="btn btn-danger">删除</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </p>
+        <p>
+            <button data-toggle="modal" data-target="#setStatusHavePay" type="button" ng-if="detailData.status_name == keywordStatusMap[11]"
+                    class="btn btn-warning">已付费
+            </button>
+
+        </p>
+            <button data-toggle="modal" data-target="#setStatusCancelPay" type="button" ng-if="detailData.status_name == keywordStatusMap[11]"
+                    class="btn btn-default btn-xs">取消付费
+            </button>
+        </p>
+    </div>
+    <div class="col-sm-12" ng-if="detailData.payment_id != null">
+        <!--这里是当前请求的所有支付单-->
+        <h3>请求支付单信息</h3>
+        <table class="table table-hover table-bordered">
+            <tr class="info">
+                <td><h4>ID</h4></td>
+                <td><h4>创建时间</h4></td>
+                <td><h4>更新时间</h4></td>
+                <td><h4>支付价格</h4></td>
+                <td><h4>支付状态</h4></td>
+                <td><h4>操作</h4></td>
+            </tr>
+            <tr class="active">
+                <td> <p>{{detailData.payment_id}}</p></td>
+                <td> <p>{{detailData.payment_create_time}}</p></td>
+                <td><p>{{detailData.payment_update_time}}</p></td>
+                <td><p>{{detailData.tax_price}}</p></td>
+                <td><p>{{detailData.payment_status}}</p></td>
+                <td><a class="btn btn-sm btn-success" href="/admin_sPayment#/detail/{{detailData.payment_id}}">查看详情</a></td>
+            </tr>
+        </table>
+    </div>
+</p>
+
+<!-- Modal已付费 -->
+<div ng-show="detailData.tax_status == 11" class="modal fade" id="setStatusHavePay" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel1">切换到已付费状态</h4>
+            </div>
+            <div class="modal-body">
+                警告！这个状态应该有第三方平台通告支付成功后来切换，你确定要切换到已付费状态吗？
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" ng-click="setStatusHavePay()" data-dismiss="modal">已付费</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal取消付费 -->
+<div ng-show="detailData.tax_status == 11" class="modal fade" id="setStatusCancelPay" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel3">切换到取消付费状态</h4>
+            </div>
+            <div class="modal-body">
+                警告！你确定要切换到取消付费状态吗？
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" ng-click="setStatusCancelPay()" data-dismiss="modal">取消付费</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

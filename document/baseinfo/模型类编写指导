@@ -1,0 +1,203 @@
+编写模型类，需要implement DataBaseModel这个接口
+实现其中的四个方法
+select方法：
+其中select方法应该给出准确详细的文档，外部只需要传入一个有限制条件的数组即可：
+/*
+ * $queryLimit
+ * |-start  起始
+ * |-num   每页条数
+ * |-class  类别（如果有）
+ * |-sort   排序
+ * |-search 搜索关键字（按照那边说）
+ * |-user   用户筛选（如果涉及到用户）
+ * |-desc   是否逆转排序即倒序(默认正序)
+ * |-paginate  分页（使用laravel自动分页，这里指定数值）
+ * |-id       限制id（制定一个固定id）
+ * |*/
+
+/*
+ * $returnData
+ * |-status 是否成功
+ * |-message 消息
+ * |-num    数据总条数(不是当前数据的条数，是可按照此限制查出的所有数据)
+ * |-data   数据 DB返回的二维结构
+ *      |- 数据库返回1（一条数据对象）
+        |- 数据库返回2（一条数据对象）
+        |- 数据库返回3（一条数据对象）
+        ...
+
+        数据对象
+        |-表中数据
+        |-标签数组（例子）
+        |-评论数组（例子）
+   查询需要避免使用多表join（链接两张表以上）
+
+add方法：
+    传入一个数组，自动填充其中的时间，和一些可以自动生成的字段
+
+delete：
+    根据一个id删除
+update：
+    更新数据，传入数组，自动填充一些字段
+ *
+ */
+
+ static function select($query_limit)
+     {
+         /*
+          * $query_limit
+          * |-start  起始
+          * |-num   每页条数
+          * |-class  类别
+          * |-sort   排序
+          * |-search 搜索关键字
+          * |-user   用户筛选（如果不设置查看所有文章）
+          * |-desc   是否逆转排序即倒序(默认正序)
+          * |-subject 专题限制
+          * |-paginate  分页
+          * |-id       限制文章id，即只查询单一文章
+          * |*/
+
+         /*
+          * $return_data
+          * |-status 是否成功
+          * |-message 消息
+          * |-data   数据 DB返回的二维结构
+          * |-total    数据总条数
+          * |
+          * 关联了标签和类*/
+         $query = DB::table("base_article");
+
+
+
+
+         //排序
+         if(  isset($query_limit["sort"])  )
+         {
+             if(isset($query_limit["desc"]) &&true==$query_limit["desc"])
+             {
+                 $query = $query->orderBy($query_limit["sort"],"desc");
+             }
+             else
+             {
+                 $query = $query->orderBy($query_limit["sort"]);
+             }
+
+         }
+         else
+         {
+             if(isset($query_limit["desc"])  && true==$query_limit["desc"])
+             {
+                 $query = $query->orderBy("article_id","desc");
+             }
+             else
+             {
+                 $query = $query->orderBy("article_id");
+             }
+         }
+
+         //按用户查找
+         if(isset($query_limit["user"]))
+         {
+             $query = $query->where("article_user","=",$query_limit["user"]);
+         }
+
+
+
+
+         //关键字
+         if ( isset($query_limit["search"]))
+         {
+             $query = $query->where("article_title","like","%".$query_limit["search"]."%");
+         }
+         //专题限制     //zc
+         if(isset($query_limit["subject"]))
+         {
+             $query = $query->join("base_article_re_subject","relation_article","=","article_id")
+                 ->join("base_article_subject","relation_subject","=","subject_id")
+                 ->where("subject_id","=",$query_limit["subject"]);
+
+         }
+         //筛选类别
+         if ( isset($query_limit["class"])  )
+         {
+             $query = $query->where("article_class","=",$query_limit["class"]);
+         }
+
+
+
+         //计算出总条数
+         $num_query  = clone $query;//克隆出来不适用原来的对象
+         $return_data["total"] = $num_query->select(DB::raw('count(*) as num'))->first()->num  ;
+
+         //起始条数
+         if ( isset($query_limit["start"])  )
+         { $query = $query->skip($query_limit["start"]);}
+
+
+         //每页条数
+         if(isset($query_limit["num"]))
+         {
+             if($query_limit["num"]==0)
+             {
+                 $return_data["status"] = true;
+                 $return_data["message"] = "查询到数据,但num设为了0";
+                 $return_data["data"] =  null;
+                 return $return_data;
+             }
+
+             $query = $query->take($query_limit["num"]);
+         }
+         else
+         {
+
+             $query = $query->take(config("my_config.default_num_page"));
+             $query_limit["num"] = config("my_config.default_num_page");
+         }
+
+         //关联到类
+         $query = $query->leftJoin("base_article_class","class_id","=","article_class");
+         //$query = $query->join("base_user","user_id","=","article_user");//严重安全漏洞，直接把密码返回去了
+
+
+         if(isset($query_limit["id"]))
+         {
+             $query = $query->where("article_id","=",$query_limit["id"]);
+         }
+
+         if(isset($query_limit["paginate"]) && $query_limit["paginate"] == true)
+         {
+
+             $data = $query->simplePaginate($query_limit["paginate"]);
+         }
+         else
+         {
+             $data = $query->get();
+         }
+
+
+
+         //关联标签                  zc
+         foreach($data as $key => $value)
+         {
+             $data[$key]->labels = DB::table("base_article_re_label")->where("relation_article","=",$value->article_id)
+                 ->join("base_article_label","label_id","=","relation_label")->get();
+         }
+         foreach($data as $key =>$value)
+         {
+             $userData = DB::table("base_user")->where("user_id","=",$value->article_user)->first();
+             if($userData!=NULL)
+             {
+                 $data[$key]->user_name = $userData->user_username;
+                 $data[$key]->user_nickname = $userData->user_nickname;
+             }
+         }
+
+         $return_data["status"] = true;
+         $return_data["message"] = "成功获取到数据";
+         $return_data["data"] = $data;
+         //var_dump($query_limit);
+         return $return_data;
+
+
+     }

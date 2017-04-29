@@ -1,0 +1,48 @@
+<div class="col-sm-12">
+    <nav class="pull-right">
+        <ul class="pagination">
+            <li>
+                <a ng-click="goIndex()"
+                   aria-label="Previous">
+                    <span class="glyphicon glyphicon-chevron-left"  aria-hidden="true"></span>
+                </a>
+            </li>
+
+        </ul>
+    </nav>
+    <div class="col-sm-3 col-sm-offset-1"><h2>添加请求：</h2></div>
+</div>
+
+<div class="col-sm-8 col-sm-offset-2">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="inputId" class="col-sm-2 control-label">请求用户ID号</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" id="inputId" ng-model="requestUser">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputRequestClass" class="col-sm-2 control-label">用户请求类型</label>
+            <div class="col-sm-5">
+                <select class="form-control" id="inputRequestClass" ng-model="requestClass">
+                    <option>请选择请求类型</option>
+                    <option ng-repeat="class in classData" value="{{class.class_id}}">{{class.class_name}}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="inputUserIntro" class="col-sm-2 control-label">请求用户介绍</label>
+            <div class="col-sm-5">
+                <textarea class="form-control" rows="3" id="inputUserIntro" ng-model="requestUserIntro"></textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-6 col-sm-6">
+                <button ng-click="addRequest()" class="btn btn-default">添加</button>
+            </div>
+        </div>
+    </form>
+</div>

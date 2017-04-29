@@ -1,0 +1,207 @@
+<div id="sRequest_index">
+    <div class="col-sm-12">
+        <nav class="pull-right">
+            <ul class="pagination">
+                <li>
+                    <a ng-click="selectPage.getLastData()"
+                       ng-if="selectPage.lastCache.length>0" aria-label="Previous">
+                        <span class="glyphicon glyphicon-chevron-left"  aria-hidden="true"></span>
+                    </a>
+                </li>
+                <li>
+                    <a ng-click="selectPage.getData()" >
+                        <span class="glyphicon glyphicon-refresh"  aria-hidden="true"></span>
+                    </a>
+                </li>
+                <li>
+                    <a  ng-click="selectPage.getNextData()" aria-label="Next"
+                       ng-if="selectPage.nextCache.length>0">
+                        <span class="glyphicon glyphicon-chevron-right"  aria-hidden="true"></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <h2>查看请求</h2>
+    </div>
+    <div class="col-sm-12">
+
+        <form class="form-inline">
+            <a class="btn-success btn" ng-click="aRequest()">
+                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                手动添加请求
+            </a>
+
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    分类:{{keywordClassMap[selectPage.limit["class"]]}} <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a
+                            ng-click="selectPage.changeLimit('class',null)">全部分类</a>
+                    </li>
+                    <li ng-repeat="class in classData"><a
+                            ng-click="selectPage.changeLimit('class',class.class_id)">{{class.class_name}}</a>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    状态:{{keywordStatusMap[selectPage.limit["status"]]}} <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a
+                            ng-click="selectPage.changeLimit('status',null)">全部状态</a>
+                    </li>
+                    <li ng-repeat="status in statusData"><a
+                            ng-click="selectPage.changeLimit('status',status.status_id)">{{status.status_name}}</a>
+                    </li>
+                </ul>
+
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                    排序:{{selectPage.limit["sort"]}} <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="" ng-click="selectPage.changeLimit('sort','request_id')">时间</a></li>
+                </ul>
+
+            </div>
+
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle"
+                        aria-haspopup="true" aria-expanded="false" ng-click="selectPage.getData()">确定搜索
+                </button>
+                &nbsp;
+                <input type="text" ng-model="selectPage.limit.id" class="form-control" id="exampleInputEmail2" placeholder="输入请求id">
+            </div>
+
+
+            <label class=" pull-right">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-click="selectPage.toggleSort()" ng-checked="selectPage.limit.desc"> 倒序
+                    </label>
+                </div>
+            </label>
+
+
+        </form>
+        <br>
+        <table class="table table-hover table-bordered">
+            <tr>
+                <th><span class="glyphicon glyphicon-user">  请求用户</span></th>
+                <th><span class="glyphicon glyphicon-paperclip">  请求类型</span></th>
+                <th><span class="glyphicon glyphicon-th-large">  请求状态</span></th>
+                <th><span class="glyphicon glyphicon-phone-alt">  联系电话</span></th>
+                <th><span class="glyphicon glyphicon-time">  创建时间</span></th>
+                <th><span class="glyphicon glyphicon-cog">  操作</span></th>
+            </tr>
+            <tr class="animate_item" ng-repeat="single in selectPage.data" >
+                <td>{{single.user_username}}</td>
+                <td>{{single.class_name}}</td>
+                <td>{{single.status}}</td>
+                <td>{{single.user_phone}}</td>
+                <td>{{single.request_create_time}}</td>
+                <td>
+                    <button data-toggle="modal" data-target="#setStatusReadyHandle{{single.request_id}}" type="button" ng-if="single.status == keywordStatusMap[6]" class="btn btn-warning btn-sm">准备处理</button>
+                    <button data-toggle="modal" data-target="#setStatusInHandle{{single.request_id}}" type="button" ng-if="single.status == keywordStatusMap[7]" class="btn btn-warning btn-sm">处理中</button>
+                    <button type="button" ng-if="single.status == keywordStatusMap[8]" ng-click="setStatusHaveHandle(single.request_id)" class="btn btn-warning btn-sm">完成处理</button>
+                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#delete{{single.request_id}}"><span class="glyphicon glyphicon-trash"> 删除</span></button>
+                    <button class="btn btn-info btn-sm " ng-click="goDetail(single.request_id)">详情</button>
+                    <!-- Modal 准备处理-->
+                    <div ng-show="single.request_status == 6" class="modal fade" id="setStatusReadyHandle{{single.request_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">切换到准备处理</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="form-horizontal">
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">管理员描述</label>
+                                            <div class="col-sm-9">
+                                                <textarea ng-model="request_admin_intro" id="{{single.request_id}}_request_admin_intro" class="form-control" rows="3"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">定义价格</label>
+                                            <div class="col-sm-9">
+                                                <input type="text" ng-model="request_price" id="{{single.request_id}}_request_price" class="form-control" id="inputEmail3">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-primary"  ng-click="setStatusReadyHandle(single.request_id)">准备处理</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal处理中 -->
+                    <div ng-show="single.request_status == 7" class="modal fade" id="setStatusInHandle{{single.request_id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel1">切换到处理中</h4>
+                                </div>
+                                <div class="modal-body">
+                                    此操作危险，你确认操作吗？操作成功后将返回当前请求的所有支付单
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button type="button" class="btn btn-primary" ng-click="setStatusInHandle(single.request_id)">处理中</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal 删除-->
+                    <div class="modal fade" id="delete{{single.request_id}}" tabindex="-1" role="dialog" aria-labelledby="deleteLabel">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="deleteLabel">删除请求</h4>
+                                </div>
+                                <div class="modal-body">
+                                    警告！你将要删除该条请求！是否继续？
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button type="button" ng-click="requestDelete(single.request_id)" class="btn btn-danger">删除</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+            <nav>
+                当前第 {{ selectPage.page.nowPage }} 页 | 总计 {{ selectPage.page.totalPage }} 页
+                <ul class="pager">
+                    <li><a ng-if="selectPage.page.nowPage>1"
+                           href="" ng-click="selectPage.previousPage()">前一页</a></li>
+
+                    <li><a ng-if="selectPage.page.nowPage<selectPage.page.totalPage"
+                           href="" ng-click="selectPage.nextPage()">下一页</a></li>
+                </ul>
+            </nav>
+
+
+    </div>
+
+
+</div>
+
+
+
+

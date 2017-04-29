@@ -1,0 +1,100 @@
+### 创建用户接口:POST /app_createUser
+        |-password
+        |-phone
+
+
+        返回标准信息，data中有创建的用户信息
+        data={
+            id //用户的id
+        }
+        如果有重名会返回相关提示信息
+
+
+### 获取服务类型 GET /app_getServer 2016/4/6
+        不符合标准查询
+
+        符合标准返回
+        data中有所有的服务类型
+        data:{
+            "class_name":string
+            "class_id":int
+        }
+
+
+
+2016/4/7
+### 提交请求 POST  /app_addRequest
+    发送一个请求到服务器
+    需要以下数据
+    |-class
+    |-user_intro
+    |-phone
+    |-address
+    |-image_0 图片二进制数据
+    |-image_1
+    |-image_2
+    ....可以添加多张图片 后面的int递增
+    返回标准结构
+    在data中返回提交请求后生成请求记录的id号，可以根据其进行后续操作
+    {id:156}
+
+
+
+
+2016/4/7
+### 上传用户头像 POST /app_addUserHeadImage
+    上传用户头像，发送格式为，需要表单为多部数据的形式（<form enctype="multipart/form-data">）
+    |-image_data 图片数据
+
+    返回标准结构
+    开发注意：图片由image表来记录(image_user为当前用户id)  用户表只留存image_id
+
+2016/4/7 更新 添加头像图片id的返回
+### 获取用户的基本信息  GET /app_getUserInfo
+    不包含需要认证的信息（真实姓名，车，房）
+    除了access_token 无需传递任何参数，不使用1.2中的标准查询
+    返回标准结构
+    其中data数据
+    {
+        user_id:int                 系统内部id
+        user_username:string,       用户名
+        user_nickname:string,       昵称
+        user_sex:string,            性别
+        user_phone:string,          电话
+        user_birthday:string,       生日
+        user_phone_backup:string    备用电话
+        user_image:int              头像图片的id
+
+    }
+
+2016/4/7 更新 返回数据有变动
+### 获取请求:GET  /app_getRequest
+   符合标准查询格式，可以查询到用户请求的服务
+   返回标准结构，其中data是一个数组
+   [
+       {//数据一
+           request_id:int //系统内部id
+           request_class:string,//类别码
+           request_user_intro:string,//用户描述/介绍，是一个json形式的数据
+           request_admin_intro:string,//客服描述 是一个json形式的数据
+           request_status:int,         //状态码
+           request_create_time:string,//创建时间
+           request_update_time:string,//更新时间
+           request_payment:int,      //支付单号码。如果没有则为0
+           request_phone:string        //手机号
+           request_address:string      //地址
+           request_images:array        //上传图片的id数组
+           },
+       {数据二...},
+       {数据三...}
+   ]
+
+2016/4/7
+孩子的增加修改，需要提供
+|-child_age
+|-child_interest
+|-child_sex
+|-child_m_phone
+
+
+

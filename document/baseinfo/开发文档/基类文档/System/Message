@@ -1,0 +1,10 @@
+Message:
+    public static function sendMessageToUserGroup($group_id,$message_data)
+        给用户组发送推送消息等
+        需要传入一个用户组ID、要发送的信息
+        成功返回true/false
+
+    public static function sendMessageToUser($message_to,$message_data)
+        给用户发送推送消息等
+        需传入一个用户ID、要发送的消息
+        成功返回true/false

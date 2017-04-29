@@ -1,0 +1,59 @@
+普通js组件
+    消息弹窗
+        设置数据并打开
+        __component_messageBar_setMessage(true,"获取到了数据")
+        __component_messageBar_open();
+
+        关闭
+        __component_messageBar_close();
+
+服务
+    SelectPageService
+        这个服务可以为被angularjs的控制器调用作为显示多条记录，筛选条件并分页的方法
+        该服务返回一个对象，里面有诸多函数和数据
+        请看下面例子，或者/admin_sRequest
+        $app.controller("someController",function($scope,SelectPageService)
+        {
+            //获得实例
+            $scope.selectPage = SelectPageService;
+            //设置请求的url
+            $scope.selectPage.getDataUrl="/test_wjt_angularApiTest";
+            //设置请求方法（默认是GET不用设置,POST需要单独设置一下）
+            $scope.selectPage.getDataMethod="POST";
+            //修改每页条数为9，默认是5
+            $scope.selectPage.changeLimit("num",9);
+            //请求数据
+            $scope.selectPage.getData();
+
+
+            //下一页
+            $scope.selectPage.nextPage();
+            //上一页
+            $scope.selectPage.previousPage();
+
+            //切换正序反序(默认开始是正序，可以查看$scope.limit.desc是否为true来获取是否为倒序)
+            $scope.selectPage.toggleSort();
+
+            //设置请求数据成功回调，他将会在分页完成后被调用
+            $scope.selectPage.successCallback= function()
+            {
+                 __component_messageBar_setMessage(true,"获取到了数据");
+                 __component_messageBar_open();
+            }
+            //请求数据失败回调
+            $scope.selectPage.errorCallback=function(){};
+            //访问分页溢出回调，用户访问了一个超出范围的页,传入一个参数，true标示超出总页数，false表示当前页小于0
+            $scope.selectPage.pageOverflowCallback = function(topOverflow){};
+
+
+            //扩展方法，如果有其他需要可以扩展方法
+            $scope.selectPage.newFunction = function(){};
+            $scope.selectPage.newFunction();//调用扩展方法
+
+            //缓存方法
+            $scope.selectPage.saveData()//获得新的文章的时候会自动调用
+            //获取缓存
+            $scope.selectPage.getOldData()
+
+
+        });

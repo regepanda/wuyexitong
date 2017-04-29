@@ -1,0 +1,41 @@
+<p id="sLog_detail">
+
+    <div class="col-sm-12">
+        <nav class="pull-right">
+            <ul class="pagination">
+                <li>
+                    <a ng-click="goIndex()"
+                       aria-label="Previous">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    </a>
+                </li>
+                <li>
+                    <a ng-click="getData()">
+                        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+        <h2>记录详情</h2>
+    </div>
+    <div class="col-sm-6">
+        <h3>基本信息：</h3>
+
+        <p>id：{{id}}</p>
+
+        <p>记录创建时间：{{detailData.log_create_time}}</p>
+
+        <p>记录管理员：{{detailData.log_admin}}</p>
+
+        <p>记录用户：{{detailData.user_username}}</p>
+        <p>记录内容：{{detailData.log_content}}</p>
+    </div>
+    <div class="col-sm-6">
+        <h3>基本信息：</h3>
+        <p>其他信息：{{detailData.log_other_data}}</p>
+        <p ng-if="detailData.class_name == null">记录类型：此记录没有类型</p>
+        <p ng-if="detailData.class_name != null">记录类型：{{detailData.class_name}}</p>
+        <p>记录等级：{{detailData.log_level}}</p>
+    </div>
+</p>

@@ -1,0 +1,33 @@
+
+
+
+
+User:
+    public static function register($username,$password,$phone,$otherData)
+        注册账户，多余信息写入$otherData
+        成功返回一个User对象 失败返回false
+
+    public static function setAccessToken(User $userModel)
+        APP使用的设定acs_token的函数，账号密码验证完成后，传入一个User类
+        函数将会返回一个token，在系统限定时间内，都可以通过这个token请求到需要登录权限的内容
+        有一个AccessTokenCheck中间件负责检查POST/GET中的access_token字段是否合法，他会调用下面的函数
+
+    public static function checkAccessToken($accessToken)
+        验证这个accessToken是否合法，或者是过期
+        返回一个数组，结构如下
+        $returnArray
+        |-status 是否成功 true/false
+        |-message 简单描述
+        |-result_code 结果码
+        |-user_id 如果匹配成功，则有这一项，代表$accessToken相应的用户的id
+
+    public function setSession()
+        将当前用户的信息写入session
+        返回 true /false
+
+    public function getAccount()
+        返回用户的默认账户id
+
+    public static function login($username, $password)
+        登录验证，成功返回User对象，自动写入session
+        失败返回false
